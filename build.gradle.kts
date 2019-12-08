@@ -17,6 +17,9 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("com.graphql-java-kickstart:graphql-java-tools:5.7.1")
+
+    implementation("ch.qos.logback:logback-classic:1.2.3")
 }
 
 application {
