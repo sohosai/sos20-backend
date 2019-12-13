@@ -25,6 +25,10 @@ dependencies {
     implementation("org.koin:koin-core-ext:$koinVersion")
     implementation("org.koin:koin-ktor:$koinVersion")
 
+    implementation("com.zaxxer:HikariCP:3.4.1")
+    implementation("org.flywaydb:flyway-core:6.1.1")
+    implementation("org.postgresql:postgresql:42.2.9")
+
     implementation("ch.qos.logback:logback-classic:1.2.3")
 }
 
