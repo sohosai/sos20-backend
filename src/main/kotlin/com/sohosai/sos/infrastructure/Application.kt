@@ -1,5 +1,7 @@
 package com.sohosai.sos.infrastructure
 
+import com.auth0.jwk.JwkProvider
+import com.auth0.jwk.JwkProviderBuilder
 import com.sohosai.sos.domain.auth.AuthContext
 import com.sohosai.sos.domain.user.Email
 import io.ktor.application.Application
@@ -15,6 +17,7 @@ import io.ktor.server.netty.EngineMain
 import org.flywaydb.core.Flyway
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
+import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
 import kotlin.properties.Delegates
 
@@ -33,12 +36,21 @@ fun Application.configure() {
     }
     install(Authentication) {
         jwt {
-            realm = "api"
+            val jwkProvider: JwkProvider = JwkProviderBuilder(env.config.property("jwt.jwkDomain").getString())
+                .cached(10, 24, TimeUnit.HOURS)
+                .rateLimited(10, 1, TimeUnit.MINUTES)
+                .build()
+            realm = env.config.property("jwt.realm").getString()
+
             // TODO: verify audience (client id)
-            verifier(JWTConfig.jwkProvider, "https://tsukuba.auth0.com/")
+            verifier(jwkProvider, env.config.property("jwt.issuer").getString())
             validate { credential ->
                 credential.payload.getClaim("email")?.asString()?.let {
-                    AuthContext(Email(it), credential.payload.getClaim("email_verified").asBoolean())
+                    AuthContext(
+                        authId = credential.payload.subject,
+                        email = Email(it),
+                        isEmailVerified = credential.payload.getClaim("email_verified").asBoolean()
+                    )
                 }
             }
         }
