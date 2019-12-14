@@ -32,7 +32,7 @@ fun Application.configure() {
     env = this.environment
 
     install(Koin) {
-        modules(KoinModules.base())
+        modules(KoinModules.dev())
     }
     install(Authentication) {
         jwt {

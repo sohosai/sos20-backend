@@ -1,3 +1,34 @@
 type Query {
-    hello(name: String!): String!
+    createUser(
+        name: String!
+        kanaName: String!
+        phoneNumber: String!
+        studentId: String!
+        affiliationName: String!
+        affiliationType: AffiliationType!
+    ): User!
+}
+
+type User {
+    name: String!
+    kanaName: String!
+    email: String!
+    phoneNumber: String!
+    studentId: String!
+    affiliation: Affiliation!
+    role: Role!
+
+}
+
+type Affiliation {
+    name: String!
+    type: AffiliationType!
+}
+
+enum AffiliationType {
+    UNDERGRADUATE, GRADUATE, TEACHER
+}
+
+enum Role {
+    ADMIN, LEADER, GENERAL
 }

@@ -1,10 +1,6 @@
 package com.sohosai.sos.domain.user
 
-enum class Affiliation {
-    // 学類生
-    UNDERGRADUATE,
-    // 院生
-    GRADUATE,
-    // 教職員
-    TEACHER
-}
+data class Affiliation(
+    val name: String,
+    val type: AffiliationType
+)
