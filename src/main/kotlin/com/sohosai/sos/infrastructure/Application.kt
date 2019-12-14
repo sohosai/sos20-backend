@@ -1,8 +1,12 @@
 package com.sohosai.sos.infrastructure
 
+import com.sohosai.sos.domain.auth.AuthContext
+import com.sohosai.sos.domain.user.Email
 import io.ktor.application.Application
 import io.ktor.application.ApplicationEnvironment
 import io.ktor.application.install
+import io.ktor.auth.Authentication
+import io.ktor.auth.jwt.jwt
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DataConversion
 import io.ktor.gson.gson
@@ -26,6 +30,18 @@ fun Application.configure() {
 
     install(Koin) {
         modules(KoinModules.base())
+    }
+    install(Authentication) {
+        jwt {
+            realm = "api"
+            // TODO: verify audience (client id)
+            verifier(JWTConfig.jwkProvider, "https://tsukuba.auth0.com/")
+            validate { credential ->
+                credential.payload.getClaim("email")?.asString()?.let {
+                    AuthContext(Email(it), credential.payload.getClaim("email_verified").asBoolean())
+                }
+            }
+        }
     }
     install(ContentNegotiation) {
         gson()
