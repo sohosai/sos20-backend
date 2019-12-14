@@ -12,4 +12,8 @@ data class User(
     val studentId: String,
     val affiliation: Affiliation,
     val role: Role
-): Principal
+): Principal {
+    fun hasPrivilege(role: Role): Boolean {
+        return role.ordinal >= this.role.ordinal
+    }
+}

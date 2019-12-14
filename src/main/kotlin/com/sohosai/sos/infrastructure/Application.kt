@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
 import kotlin.properties.Delegates
 
+var application: Application by Delegates.notNull()
 var env: ApplicationEnvironment by Delegates.notNull()
 
 fun main(args: Array<String>) {
@@ -29,6 +30,7 @@ fun main(args: Array<String>) {
 
 @Suppress("unused") // called in application.conf
 fun Application.configure() {
+    application = this
     env = this.environment
 
     install(Koin) {

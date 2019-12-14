@@ -4,7 +4,6 @@ import com.sohosai.sos.domain.graphql.GraphQLRequest
 import graphql.ExecutionInput
 import graphql.ExecutionResult
 import graphql.GraphQL
-import graphql.GraphQLContext
 import io.ktor.auth.Principal
 
 class GraphQLService(private val graphQL: GraphQL) {

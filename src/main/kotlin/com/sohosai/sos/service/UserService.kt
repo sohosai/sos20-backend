@@ -26,4 +26,13 @@ class UserService(private val userRepository: UserRepository) {
             authId = authId
         )
     }
+
+    suspend fun listUsers(viewer: User): List<User> {
+        if (!viewer.hasPrivilege(Role.LEADER)) {
+            // TODO: improve error handling
+            throw IllegalStateException("Not enough permission")
+        }
+
+        return userRepository.listUsers()
+    }
 }

@@ -12,4 +12,8 @@ interface UserRepository {
         role: Role,
         authId: String
     ): User
+
+    suspend fun listUsers(): List<User>
+
+    suspend fun findUserByAuthId(authId: String): User?
 }
