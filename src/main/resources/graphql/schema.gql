@@ -1,4 +1,8 @@
 type Query {
+    listUsers: [User!]!
+}
+
+type Mutation {
     createUser(
         name: String!
         kanaName: String!
@@ -7,8 +11,6 @@ type Query {
         affiliationName: String!
         affiliationType: AffiliationType!
     ): User!
-
-    listUsers: [User!]!
 }
 
 type User {

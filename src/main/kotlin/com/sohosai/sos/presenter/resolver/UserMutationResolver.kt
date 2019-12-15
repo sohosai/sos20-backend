@@ -1,6 +1,6 @@
 package com.sohosai.sos.presenter.resolver
 
-import com.coxautodev.graphql.tools.GraphQLQueryResolver
+import com.coxautodev.graphql.tools.GraphQLMutationResolver
 import com.sohosai.sos.domain.auth.AuthContext
 import com.sohosai.sos.domain.user.AffiliationType
 import com.sohosai.sos.domain.user.PhoneNumber
@@ -10,8 +10,7 @@ import com.sohosai.sos.service.UserService
 import graphql.schema.DataFetchingEnvironment
 
 @Suppress("unused")
-class UserResolver(private val userService: UserService) : GraphQLQueryResolver {
-
+class UserMutationResolver(private val userService: UserService) : GraphQLMutationResolver {
     suspend fun createUser(
         name: String,
         kanaName: String,
@@ -35,14 +34,5 @@ class UserResolver(private val userService: UserService) : GraphQLQueryResolver 
             role = Role.GENERAL,
             authId = context.authId
         )
-    }
-
-    suspend fun listUsers(
-        environment: DataFetchingEnvironment
-    ): List<User> {
-        val context = environment.getContext<AuthContext>()
-        val user = requireNotNull(context.toUser())
-
-        return userService.listUsers(user)
     }
 }

@@ -5,7 +5,8 @@ import com.sohosai.sos.domain.user.UserRepository
 import com.sohosai.sos.infrastructure.graphql.GraphQLConfigurer
 import com.sohosai.sos.infrastructure.repository.jdbc.JdbcUserRepository
 import com.sohosai.sos.presenter.controller.GraphQLController
-import com.sohosai.sos.presenter.resolver.UserResolver
+import com.sohosai.sos.presenter.resolver.UserMutationResolver
+import com.sohosai.sos.presenter.resolver.UserQueryResolver
 import com.sohosai.sos.service.GraphQLService
 import com.sohosai.sos.service.UserService
 import com.zaxxer.hikari.HikariConfig
@@ -19,7 +20,8 @@ object KoinModules {
     private fun resolvers() = module {
         single<List<GraphQLResolver<*>>> {
             listOf(
-                UserResolver(get())
+                UserQueryResolver(get()),
+                UserMutationResolver(get())
             )
         }
     }
