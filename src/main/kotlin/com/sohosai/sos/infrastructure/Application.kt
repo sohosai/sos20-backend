@@ -3,12 +3,15 @@ package com.sohosai.sos.infrastructure
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.sohosai.sos.domain.auth.AuthContext
+import com.sohosai.sos.domain.auth.AuthStatus
 import com.sohosai.sos.domain.user.Email
 import io.ktor.application.Application
 import io.ktor.application.ApplicationEnvironment
 import io.ktor.application.install
 import io.ktor.auth.Authentication
+import io.ktor.auth.authentication
 import io.ktor.auth.jwt.jwt
+import io.ktor.auth.principal
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DataConversion
 import io.ktor.gson.gson
@@ -43,15 +46,21 @@ fun Application.configure() {
                 .rateLimited(10, 1, TimeUnit.MINUTES)
                 .build()
             realm = env.config.property("jwt.realm").getString()
-
+            challenge { _, _ ->
+                this.context.authentication.errors["JWTAuth"]?.let {
+                    this.context.authentication.principal = AuthStatus.Unauthorized(it)
+                }
+            }
             // TODO: verify audience (client id)
             verifier(jwkProvider, env.config.property("jwt.issuer").getString())
             validate { credential ->
-                credential.payload.getClaim("email")?.asString()?.let {
-                    AuthContext(
-                        authId = credential.payload.subject,
-                        email = Email(it),
-                        isEmailVerified = credential.payload.getClaim("email_verified").asBoolean()
+                this.principal() ?: credential.payload.getClaim("email")?.asString()?.let {
+                    AuthStatus.Authorized(
+                        AuthContext(
+                            authId = credential.payload.subject,
+                            email = Email(it),
+                            isEmailVerified = credential.payload.getClaim("email_verified").asBoolean()
+                        )
                     )
                 }
             }

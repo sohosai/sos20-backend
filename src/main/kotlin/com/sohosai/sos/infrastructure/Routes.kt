@@ -10,7 +10,7 @@ import org.koin.ktor.ext.get
 
 internal fun Routing.routes() {
     val graphQLController: GraphQLController = get()
-    authenticate {
+    authenticate(optional = true) {
         get("/graphql") { graphQLController.get(call) }
         post("/graphql") { graphQLController.post(call) }
     }
