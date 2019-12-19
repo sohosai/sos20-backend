@@ -15,6 +15,7 @@ internal fun Routing.routes() {
     authenticate(optional = true) {
         get("/graphql") { graphQLController.get(call) }
         post("/graphql") { graphQLController.post(call) }
+        get("/") { call.respond(HttpStatusCode.OK) }
         get("/health-check") { call.respond(HttpStatusCode.OK) }
     }
 }
