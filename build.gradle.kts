@@ -7,7 +7,7 @@ plugins {
 group = "com.sohosai"
 version = "1.0-SNAPSHOT"
 
-val ktorVersion = "1.2.6"
+val ktorVersion = "1.3.0-rc"
 val koinVersion = "2.0.1"
 
 repositories {
