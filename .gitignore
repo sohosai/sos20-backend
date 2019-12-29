@@ -1,8 +1,8 @@
 # IDEA
 /.idea
 *.iml
-/out
+out/
 
 # Gradle
-/.gradle
-/build
+.gradle/
+build/
