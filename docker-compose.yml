@@ -9,7 +9,7 @@ services:
       - gradle:/root/.gradle
     working_dir: /app
     entrypoint: ./gradlew
-    command: run --console plain --quiet
+    command: infrastructure:run --console plain --quiet
     depends_on:
       - postgresql
   postgresql:
