@@ -25,7 +25,8 @@ subprojects {
             kotlinOptions.freeCompilerArgs = listOf(
                 "-Xjsr305=strict",
                 "-Xinline-classes",
-                "-Xuse-experimental=io.ktor.util.KtorExperimentalAPI"
+                "-Xuse-experimental=io.ktor.util.KtorExperimentalAPI",
+                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
             )
         }
         compileTestKotlin {
@@ -33,7 +34,8 @@ subprojects {
             kotlinOptions.freeCompilerArgs = listOf(
                 "-Xjsr305=strict",
                 "-Xinline-classes",
-                "-Xuse-experimental=io.ktor.util.KtorExperimentalAPI"
+                "-Xuse-experimental=io.ktor.util.KtorExperimentalAPI",
+                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
             )
         }
     }

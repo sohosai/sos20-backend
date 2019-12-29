@@ -1,4 +1,4 @@
-package com.sohosai.sos.domain.graphql
+package com.sohosai.sos.infrastructure.graphql
 
 data class GraphQLRequest(
     val query: String,

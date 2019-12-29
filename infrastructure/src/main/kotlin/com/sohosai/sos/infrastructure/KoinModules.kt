@@ -2,6 +2,8 @@ package com.sohosai.sos.infrastructure
 
 import com.coxautodev.graphql.tools.GraphQLResolver
 import com.sohosai.sos.database.JdbcUserRepository
+import com.sohosai.sos.infrastructure.graphql.GraphQLConfigurer
+import com.sohosai.sos.infrastructure.graphql.GraphQLHandler
 import com.sohosai.sos.interfaces.UserMutationResolver
 import com.sohosai.sos.interfaces.UserQueryResolver
 import com.sohosai.sos.service.UserRepository
@@ -33,8 +35,7 @@ object KoinModules {
 
     private fun graphql() = module {
         single { GraphQLConfigurer.configure(get()) }
-        single { GraphQLService(get()) }
-        single { GraphQLController(get()) }
+        single { GraphQLHandler(get()) }
     }
 
     private fun database() = module {

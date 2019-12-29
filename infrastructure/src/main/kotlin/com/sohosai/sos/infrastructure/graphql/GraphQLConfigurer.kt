@@ -1,4 +1,4 @@
-package com.sohosai.sos.infrastructure
+package com.sohosai.sos.infrastructure.graphql
 
 import com.coxautodev.graphql.tools.GraphQLResolver
 import com.coxautodev.graphql.tools.SchemaParserBuilder
@@ -10,7 +10,6 @@ import graphql.language.Definition
 import graphql.language.ObjectTypeDefinition
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 object GraphQLConfigurer {
     fun configure(resolvers: List<GraphQLResolver<*>>): GraphQL {
         val options = SchemaParserOptions.newOptions()

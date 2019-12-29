@@ -1,5 +1,6 @@
 package com.sohosai.sos.infrastructure
 
+import com.sohosai.sos.infrastructure.graphql.GraphQLHandler
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.HttpStatusCode
@@ -10,10 +11,10 @@ import io.ktor.routing.post
 import org.koin.ktor.ext.get
 
 internal fun Routing.routes() {
-    val graphQLController: GraphQLController = get()
+    val graphQLHandler: GraphQLHandler = get()
     authenticate(optional = true) {
-        get("/graphql") { graphQLController.get(call) }
-        post("/graphql") { graphQLController.post(call) }
+        get("/graphql") { graphQLHandler.handleCall(call) }
+        post("/graphql") { graphQLHandler.handleCall(call) }
         get("/") { call.respond(HttpStatusCode.OK) }
         get("/health-check") { call.respond(HttpStatusCode.OK) }
     }

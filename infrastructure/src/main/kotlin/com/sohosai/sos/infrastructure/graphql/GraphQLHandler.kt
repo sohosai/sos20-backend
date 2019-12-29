@@ -1,15 +1,26 @@
-package com.sohosai.sos.infrastructure
+@file:JvmName("GraphQLHandlerKt")
 
-import com.sohosai.sos.domain.graphql.GraphQLRequest
+package com.sohosai.sos.infrastructure.graphql
+
+import com.sohosai.sos.infrastructure.AuthStatus
 import graphql.*
+import io.ktor.application.ApplicationCall
 import io.ktor.auth.AuthenticationFailedCause
+import io.ktor.auth.principal
+import io.ktor.request.receive
+import io.ktor.response.respond
 
 private val allowedOperationWithoutToken = listOf(
     "IntrospectionQuery"
 )
 
-class GraphQLService(private val graphQL: GraphQL) {
-    fun executeQuery(request: GraphQLRequest, authStatus: AuthStatus?): ExecutionResult {
+class GraphQLHandler(private val graphQL: GraphQL) {
+
+    suspend fun handleCall(call: ApplicationCall) {
+        call.respond(executeQuery(call.receive(), call.principal()))
+    }
+
+    private fun executeQuery(request: GraphQLRequest, authStatus: AuthStatus?): ExecutionResult {
         if (request.operationName !in allowedOperationWithoutToken) {
             if (authStatus == null) {
                 // To support possible bug of ktor: https://github.com/ktorio/ktor/issues/1503
