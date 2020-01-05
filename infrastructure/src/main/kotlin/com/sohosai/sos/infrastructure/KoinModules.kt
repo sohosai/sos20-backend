@@ -1,16 +1,21 @@
 package com.sohosai.sos.infrastructure
 
 import com.coxautodev.graphql.tools.GraphQLResolver
+import com.sohosai.sos.database.JdbcProjectRepository
 import com.sohosai.sos.database.JdbcUserRepository
+import com.sohosai.sos.domain.project.ProjectRepository
 import com.sohosai.sos.infrastructure.graphql.GraphQLConfigurer
 import com.sohosai.sos.infrastructure.graphql.GraphQLHandler
 import com.sohosai.sos.interfaces.UserMutationResolver
 import com.sohosai.sos.interfaces.UserQueryResolver
-import com.sohosai.sos.service.UserRepository
+import com.sohosai.sos.domain.user.UserRepository
+import com.sohosai.sos.interfaces.project.ProjectMutationResolver
 import com.sohosai.sos.service.UserService
+import com.sohosai.sos.service.project.ProjectService
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.koin.dsl.module
+import org.koin.experimental.builder.single
 import javax.sql.DataSource
 
 object KoinModules {
@@ -20,17 +25,20 @@ object KoinModules {
         single<List<GraphQLResolver<*>>> {
             listOf(
                 UserQueryResolver(get()),
-                UserMutationResolver(get())
+                UserMutationResolver(get()),
+                ProjectMutationResolver(get())
             )
         }
     }
 
     private fun services() = module {
         single { UserService(get()) }
+        single<ProjectService>()
     }
 
     private fun repositories() = module {
         single<UserRepository> { JdbcUserRepository(get()) }
+        single<ProjectRepository> { JdbcProjectRepository(get()) }
     }
 
     private fun graphql() = module {

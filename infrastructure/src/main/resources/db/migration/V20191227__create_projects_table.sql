@@ -1,3 +1,6 @@
+CREATE TYPE PROJECT_CATEGORY AS ENUM ('GENERAL', 'STAGE');
+CREATE TYPE PROJECT_ATTRIBUTE AS ENUM ('ACADEMIC', 'ARTISTIC', 'COMMITTEE');
+
 CREATE TABLE projects (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     owner_id UUID REFERENCES users UNIQUE NOT NULL,
@@ -7,6 +10,6 @@ CREATE TABLE projects (
     group_name VARCHAR(100) NOT NULL,
     kana_group_name VARCHAR(100) NOT NULL,
     description VARCHAR(500) NOT NULL,
-    category SMALLINT NOT NULL,
-    attributes SMALLINT[] NOT NULL
-)
+    category PROJECT_CATEGORY NOT NULL,
+    attributes PROJECT_ATTRIBUTE[] NOT NULL
+);

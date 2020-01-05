@@ -1,3 +1,29 @@
-type Project {
+extend type Mutation {
+    createProject(
+        name: String!
+        kanaName: String!
+        groupName: String!
+        kanaGroupName: String!
+        description: String!
+        category: ProjectCategory!
+        attributes: [ProjectAttribute!]!
+    ): Project!
+}
 
+type Project {
+    name: String!
+    kanaName: String!
+    groupName: String!
+    kanaGroupName: String!
+    description: String!
+    category: ProjectCategory!
+    attributes: [ProjectAttribute!]!
+}
+
+enum ProjectCategory {
+    GENERAL, STAGE
+}
+
+enum ProjectAttribute {
+    ACADEMIC, ARTISTIC, COMMITTEE
 }

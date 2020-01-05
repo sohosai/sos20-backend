@@ -16,13 +16,16 @@ object GraphQLConfigurer {
             .typeDefinitionFactory(OutputTypeDefinitionFactory)
             .build()
         val schema = SchemaParserBuilder()
-            .file("graphql/schema.gql")
+            .files(
+                "graphql/schema.gql",
+                "graphql/project.gql"
+            )
             .resolvers(resolvers)
             .options(options)
             .build().makeExecutableSchema()
 
         return GraphQL.newGraphQL(schema)
-            .instrumentation(MaxQueryComplexityInstrumentation(5))
+            .instrumentation(MaxQueryComplexityInstrumentation(100))
             .build()
     }
 }
