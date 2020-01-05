@@ -28,10 +28,10 @@ class GraphQLHandler(private val graphQL: GraphQL) {
             } else if (authStatus is AuthStatus.Unauthorized) {
                 return when (authStatus.cause) {
                     is AuthenticationFailedCause.NoCredentials -> UnauthorizedExecutionResult(
-                        "No token"
+                        "No token given"
                     )
                     is AuthenticationFailedCause.InvalidCredentials -> UnauthorizedExecutionResult(
-                        "Invalid token"
+                        "Invalid token given"
                     )
                     is AuthenticationFailedCause.Error -> UnauthorizedExecutionResult(
                         authStatus.cause.cause

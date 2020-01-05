@@ -8,7 +8,6 @@ import graphql.GraphQL
 import graphql.analysis.MaxQueryComplexityInstrumentation
 import graphql.language.Definition
 import graphql.language.ObjectTypeDefinition
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 object GraphQLConfigurer {
     fun configure(resolvers: List<GraphQLResolver<*>>): GraphQL {
@@ -17,7 +16,8 @@ object GraphQLConfigurer {
             .build()
         val schema = SchemaParserBuilder()
             .files(
-                "graphql/schema.gql",
+                "graphql/base.gql",
+                "graphql/user.gql",
                 "graphql/project.gql"
             )
             .resolvers(resolvers)
