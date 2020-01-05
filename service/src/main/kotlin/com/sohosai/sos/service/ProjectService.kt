@@ -1,4 +1,4 @@
-package com.sohosai.sos.service.project
+package com.sohosai.sos.service
 
 import com.sohosai.sos.domain.project.Project
 import com.sohosai.sos.domain.project.ProjectAttribute

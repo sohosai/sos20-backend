@@ -6,12 +6,12 @@ import com.sohosai.sos.database.JdbcUserRepository
 import com.sohosai.sos.domain.project.ProjectRepository
 import com.sohosai.sos.infrastructure.graphql.GraphQLConfigurer
 import com.sohosai.sos.infrastructure.graphql.GraphQLHandler
-import com.sohosai.sos.interfaces.UserMutationResolver
-import com.sohosai.sos.interfaces.UserQueryResolver
+import com.sohosai.sos.interfaces.user.UserMutationResolver
+import com.sohosai.sos.interfaces.user.UserQueryResolver
 import com.sohosai.sos.domain.user.UserRepository
 import com.sohosai.sos.interfaces.project.ProjectMutationResolver
 import com.sohosai.sos.service.UserService
-import com.sohosai.sos.service.project.ProjectService
+import com.sohosai.sos.service.ProjectService
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.koin.dsl.module

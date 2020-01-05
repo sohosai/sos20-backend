@@ -13,7 +13,7 @@ class UserService(private val userRepository: UserRepository) {
         affiliationType: AffiliationType,
         role: Role,
         authId: String
-    ): User {
+        ): User {
         return userRepository.createUser(
             name = name,
             kanaName = kanaName,

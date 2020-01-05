@@ -1,7 +1,7 @@
 package com.sohosai.sos.database
 
 import com.sohosai.sos.domain.user.*
-import com.sohosai.sos.service.UserRepository
+import com.sohosai.sos.domain.user.UserRepository
 import kotlinx.coroutines.withContext
 import kotliquery.Row
 import kotliquery.queryOf
@@ -22,6 +22,13 @@ private val CREATE_USER_QUERY = """
 private val LIST_USERS_QUERY = """
     SELECT id, name, kana_name, email, phone_number, student_id, affiliation_name, affiliation_type, role
     FROM users
+""".trimIndent()
+
+@Language("sql")
+private val FIND_USER_BY_ID_QUERY = """
+    SELECT id, name, kana_name, email, phone_number, student_id, affiliation_name, affiliation_type, role
+    FROM users
+    WHERE id = ?
 """.trimIndent()
 
 @Language("sql")
@@ -72,6 +79,12 @@ class JdbcUserRepository(private val dataSource: DataSource) :
         }
     }
 
+    override suspend fun findUserById(id: UUID): User? = withContext(coroutineContext) {
+        sessionOf(dataSource).use { session ->
+            session.single(queryOf(FIND_USER_BY_ID_QUERY, id), userExtractor)
+        }
+    }
+
     override suspend fun findUserByAuthId(authId: String): User? = withContext(coroutineContext) {
         sessionOf(dataSource).use { session ->
             session.single(queryOf(FIND_USER_BY_AUTH_ID_QUERY, authId), userExtractor)
@@ -80,17 +93,17 @@ class JdbcUserRepository(private val dataSource: DataSource) :
 
     private val userExtractor = { row: Row ->
         User(
-            id = row.uuid(1),
-            name = row.string(2),
-            kanaName = row.string(3),
-            email = Email(row.string(4)),
-            phoneNumber = PhoneNumber(row.string(5)),
-            studentId = row.string(6),
+            id = row.uuid("id"),
+            name = row.string("name"),
+            kanaName = row.string("kana_name"),
+            email = Email(row.string("email")),
+            phoneNumber = PhoneNumber(row.string("phone_number")),
+            studentId = row.string("student_id"),
             affiliation = Affiliation(
-                row.string(7),
-                AffiliationType.values()[row.int(8)]
+                row.string("affiliation_name"),
+                AffiliationType.values()[row.int("affiliation_type")]
             ),
-            role = Role.values()[row.int(9)]
+            role = Role.values()[row.int("role")]
         )
     }
 }

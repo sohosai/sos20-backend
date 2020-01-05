@@ -1,6 +1,6 @@
-package com.sohosai.sos.service
+package com.sohosai.sos.domain.user
 
-import com.sohosai.sos.domain.user.*
+import java.util.*
 
 interface UserRepository {
     suspend fun createUser(
@@ -16,6 +16,8 @@ interface UserRepository {
     ): User
 
     suspend fun listUsers(): List<User>
+
+    suspend fun findUserById(id: UUID): User?
 
     suspend fun findUserByAuthId(authId: String): User?
 }

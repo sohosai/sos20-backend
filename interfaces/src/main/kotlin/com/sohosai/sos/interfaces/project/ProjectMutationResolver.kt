@@ -6,7 +6,7 @@ import com.sohosai.sos.domain.project.ProjectAttribute
 import com.sohosai.sos.domain.project.ProjectCategory
 import com.sohosai.sos.interfaces.AuthContext
 import com.sohosai.sos.interfaces.toUser
-import com.sohosai.sos.service.project.ProjectService
+import com.sohosai.sos.service.ProjectService
 import graphql.schema.DataFetchingEnvironment
 
 @Suppress("unused")

@@ -1,7 +1,9 @@
-package com.sohosai.sos.interfaces
+package com.sohosai.sos.interfaces.user
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver
 import com.sohosai.sos.domain.user.User
+import com.sohosai.sos.interfaces.AuthContext
+import com.sohosai.sos.interfaces.toUser
 import com.sohosai.sos.service.UserService
 import graphql.schema.DataFetchingEnvironment
 
