@@ -4,8 +4,9 @@ import com.coxautodev.graphql.tools.GraphQLResolver
 import com.coxautodev.graphql.tools.SchemaParserBuilder
 import com.coxautodev.graphql.tools.SchemaParserOptions
 import com.coxautodev.graphql.tools.TypeDefinitionFactory
-import graphql.GraphQL
+import graphql.*
 import graphql.analysis.MaxQueryComplexityInstrumentation
+import graphql.execution.*
 import graphql.language.Definition
 import graphql.language.ObjectTypeDefinition
 
@@ -26,6 +27,8 @@ object GraphQLConfigurer {
 
         return GraphQL.newGraphQL(schema)
             .instrumentation(MaxQueryComplexityInstrumentation(100))
+            .queryExecutionStrategy(AsyncExecutionStrategy(CustomDataFetcherExceptionHandler))
+            .mutationExecutionStrategy(AsyncExecutionStrategy(CustomDataFetcherExceptionHandler))
             .build()
     }
 }
@@ -36,6 +39,18 @@ private object OutputTypeDefinitionFactory : TypeDefinitionFactory {
             .map { def ->
                 def.transform { it.name(def.name + "Output") }
             }.toMutableList()
+    }
+}
+
+private object CustomDataFetcherExceptionHandler : DataFetcherExceptionHandler {
+    override fun onException(handlerParameters: DataFetcherExceptionHandlerParameters): DataFetcherExceptionHandlerResult {
+        val error = GraphqlErrorBuilder.newError(handlerParameters.dataFetchingEnvironment)
+            .message(handlerParameters.exception.message)
+            .errorType(ErrorType.DataFetchingException)
+            .path(handlerParameters.path)
+            .location(null)
+            .build()
+        return DataFetcherExceptionHandlerResult.newResult(error).build()
     }
 
 }
