@@ -30,8 +30,8 @@ private val FIND_PROJECT_BY_OWNER_QUERY = """
 class JdbcProjectRepository(private val dataSource: DataSource) :
     ProjectRepository {
     override suspend fun createProject(
-        owner: User,
-        subOwner: User?,
+        ownerId: UUID,
+        subOwnerId: UUID?,
         name: String,
         kanaName: String,
         groupName: String,
@@ -44,13 +44,13 @@ class JdbcProjectRepository(private val dataSource: DataSource) :
             session.single(
                 queryOf(
                     CREATE_PROJECT_QUERY,
-                    owner.id, subOwner?.id, name, kanaName, groupName, kanaGroupName, description, category.name, attributes.map { it.name }.toTypedArray()
+                    ownerId, subOwnerId, name, kanaName, groupName, kanaGroupName, description, category.name, attributes.map { it.name }.toTypedArray()
                 )
             ) { row ->
                 Project(
                     id = row.uuid("id"),
-                    ownerId = owner.id,
-                    subOwnerId = subOwner?.id,
+                    ownerId = ownerId,
+                    subOwnerId = subOwnerId,
                     name = name,
                     kanaName = kanaName,
                     groupName = groupName,

@@ -31,8 +31,8 @@ class ProjectService(
         }
 
         return projectRepository.createProject(
-            owner = owner,
-            subOwner = subOwner,
+            ownerId = owner.id,
+            subOwnerId = subOwner?.id,
             name = name,
             kanaName = kanaName,
             groupName = groupName,
