@@ -10,6 +10,7 @@ import com.sohosai.sos.interfaces.user.UserMutationResolver
 import com.sohosai.sos.interfaces.user.UserQueryResolver
 import com.sohosai.sos.domain.user.UserRepository
 import com.sohosai.sos.interfaces.project.ProjectMutationResolver
+import com.sohosai.sos.interfaces.project.ProjectResolver
 import com.sohosai.sos.service.UserService
 import com.sohosai.sos.service.ProjectService
 import com.zaxxer.hikari.HikariConfig
@@ -26,6 +27,8 @@ object KoinModules {
             listOf(
                 UserQueryResolver(get()),
                 UserMutationResolver(get()),
+
+                ProjectResolver(get()),
                 ProjectMutationResolver(get())
             )
         }

@@ -18,6 +18,8 @@ type Project {
     description: String!
     category: ProjectCategory!
     attributes: [ProjectAttribute!]!
+    owner: User!
+    subOwner: User
 }
 
 enum ProjectCategory {
