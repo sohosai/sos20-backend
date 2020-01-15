@@ -1,0 +1,178 @@
+# 申請のID。UUID
+scalar ApplicationId
+# 申請項目ID。整数連番
+scalar ApplicationItemId
+# 選択肢ID。整数連番
+scalar ApplicationItemOptionId
+# 選択項目ID。整数連番
+scalar ApplicationItemOptionLabelId
+
+# 申請
+type Application {
+    # ID
+    id: ApplicationId!
+    # 名前
+    name: String!
+    # 説明
+    description: String!
+    # 申請の作成者
+    author: User!
+    # 申請項目リスト
+    items: [ApplicationItem!]!
+    # 申請に回答する企画の参加区分
+    targetCategory: ProjectCategory!
+    # 申請に回答する企画の属性
+    targetAttributes: [ProjectAttribute!]!
+}
+
+interface ApplicationCondition
+# 申請に回答する企画の条件
+# 申請に回答する企画の条件を、特定の申請に対する回答状況で指定する
+type ApplicationConditionAnsweredApplication {
+    # 申請ID。この申請に回答している企画を絞り込む
+    applicationId: ApplicationId!
+}
+
+# 申請に回答する企画の条件を、特定の申請項目に対する回答状況で指定する
+type ApplicationConditionAnsweredApplicationItem {
+    # 申請ID
+    applicationId: ApplicationId!
+    # 項目の回答状況
+    itemCondition: ApplicationItemCondition!
+}
+
+# 申請に回答する企画の条件を、企画の参加区分で指定する
+type ApplicationConditionProjectCategory {
+    # 申請に回答する企画の参加区分
+    category: ProjectCategory!
+}
+
+# 申請に回答する企画の条件を、企画の属性で指定する
+type ApplicationConditionProjectAttributes {
+    # 申請に回答する企画の属性リスト
+    attributes: [ProjectAttribute!]!
+}
+
+# 申請の項目
+interface ApplicationItem {
+    # ID
+    id: ApplicationItemId!
+    # 名前
+    name: String!
+    # 説明
+    description: String!
+    # 項目を回答する条件
+    condition: ApplicationItemCondition
+}
+
+# テキストで答える申請の項目
+type ApplicationItemText implements ApplicationItem {
+    id: ApplicationItemId!
+    name: String!
+    description: String!
+    condition: ApplicationItemCondition
+
+    # 最低文字数
+    minLength: Int!
+    # 最大文字数
+    maxLength: Int!
+    # プレイスホルダ
+    placeHolder: String
+}
+
+# 数字で答える申請の項目
+type ApplicationItemNumber implements ApplicationItem {
+    id: ApplicationItemId!
+    name: String!
+    description: String!
+    condition: ApplicationItemCondition
+
+    # 最小値
+    min: Int!
+    # 最大値
+    max: Int!
+    # プレイスホルダ
+    placeHolder: String
+}
+
+# 選択肢から1つ選ぶ申請の項目
+type ApplicationItemSingleChoice implements ApplicationItem {
+    id: ApplicationItemId!
+    name: String!
+    description: String!
+    condition: ApplicationItemCondition
+
+    # 選択肢リスト
+    options: [ApplicationItemOption!]!
+}
+
+# 選択肢から複数選ぶ申請の項目
+type ApplicationItemMultipleChoice implements ApplicationItem {
+    id: ApplicationItemId!
+    name: String!
+    description: String!
+    condition: ApplicationItemCondition
+
+    # 選択肢リスト
+    options: [ApplicationItemOption!]!
+}
+
+# 選択肢からラベルつきで複数個選ぶ申請の項目
+type ApplicationItemLabeledMultipleChoice implements ApplicationItem {
+    id: ApplicationItemId!
+    name: String!
+    description: String!
+    condition: ApplicationItemCondition
+
+    # 選択肢リスト
+    options: [ApplicationItemOption!]!
+    # 選択項目リスト
+    labels: [ApplicationItemOptionLabel!]!
+}
+
+# ファイルを送信する申請の項目
+type ApplicationItemFile implements ApplicationItem {
+    id: ApplicationItemId!
+    name: String!
+    description: String!
+    condition: ApplicationItemCondition
+
+    # 入力可能なMIMEタイプ
+    allowed_types: [String!]!
+    # 複数入力を許可するかどうか
+    isMultipleAllowed: Boolean!
+}
+
+# 質問項目に対する条件
+union ApplicationItemCondition = ApplicationItemConditionOr | ApplicationItemConditionAnd | ApplicationItemConditionAnswer
+
+# OR
+type ApplicationItemConditionOr {
+    left: ApplicationItemCondition
+    right: ApplicationItemCondition
+}
+
+# AND
+type ApplicationItemConditionAnd {
+    left: ApplicationItemCondition
+    right: ApplicationItemCondition
+}
+
+# ある質問項目である選択肢を選んでいた場合
+type ApplicationItemConditionAnswer {
+    itemId: ApplicationItemId!
+    optionId: String!
+    shouldBeSelected: Boolean!
+}
+
+# 質問項目の選択肢
+type ApplicationItemOption {
+    id: ApplicationItemOptionId!
+    name: String!
+}
+
+# 質問項目の選択項目
+type ApplicationItemOptionLabel {
+    id: ApplicationItemOptionLabelId!
+    name: String!
+}
