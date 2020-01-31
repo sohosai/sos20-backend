@@ -73,6 +73,8 @@ fun Application.configure() {
         method(HttpMethod.Options)
         header(HttpHeaders.Authorization)
         header("x-requested-with")
+        header("content-type")
+        header("Authorization")
         allowCredentials = true
         maxAgeInSeconds = Duration.ofDays(1).seconds
         anyHost()
