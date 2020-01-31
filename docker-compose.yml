@@ -1,17 +1,17 @@
 version: '3'
 services:
-  app:
-    image: openjdk:11
-    ports:
-      - 8080:8080
-    volumes:
-      - .:/app:delegated
-      - gradle:/root/.gradle
-    working_dir: /app
-    entrypoint: ./gradlew
-    command: infrastructure:run --console plain --quiet
-    depends_on:
-      - postgresql
+#  app:
+#    image: openjdk:11
+#    ports:
+#      - 8080:8080
+#    volumes:
+#      - .:/app:delegated
+#      - gradle:/root/.gradle
+#    working_dir: /app
+#    entrypoint: ./gradlew
+#    command: infrastructure:run --console plain --quiet --no-daemon
+#    depends_on:
+#      - postgresql
   postgresql:
     image: postgres:12.1-alpine
     environment:

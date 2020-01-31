@@ -2,6 +2,7 @@ package com.sohosai.sos.infrastructure
 
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
+import com.google.gson.FieldNamingPolicy
 import com.sohosai.sos.domain.user.Email
 import com.sohosai.sos.interfaces.AuthContext
 import io.ktor.application.Application
@@ -45,15 +46,10 @@ fun Application.configure() {
                 .rateLimited(10, 1, TimeUnit.MINUTES)
                 .build()
             realm = env.config.property("jwt.realm").getString()
-            challenge { _, _ ->
-                this.context.authentication.errors["JWTAuth"]?.let {
-                    this.context.authentication.principal = AuthStatus.Unauthorized(it)
-                }
-            }
             // TODO: verify audience (client id)
             verifier(jwkProvider, env.config.property("jwt.issuer").getString())
             validate { credential ->
-                this.principal() ?: credential.payload.getClaim("email")?.asString()?.let {
+                credential.payload.getClaim("email")?.asString()?.let {
                     AuthStatus.Authorized(
                         AuthContext(
                             authId = credential.payload.subject,
@@ -66,9 +62,12 @@ fun Application.configure() {
         }
     }
     install(ContentNegotiation) {
-        gson()
+        gson {
+            setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+        }
     }
     install(DataConversion)
+
     migrateDatabase(get())
 
     routing {
