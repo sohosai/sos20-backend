@@ -15,7 +15,7 @@ import org.koin.ktor.ext.get
 internal fun Routing.routes() {
     val userController = UserController(get())
     authenticate {
-        post("/user") {
+        post("/users") {
             call.respond(userController.createUser(
                 input = call.receive(),
                 context = call.principal<AuthStatus>().asContext()
