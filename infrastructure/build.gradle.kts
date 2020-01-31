@@ -17,7 +17,6 @@ dependencies {
     implementation("io.ktor:ktor-auth:$ktorVersion")
     implementation("io.ktor:ktor-auth-jwt:$ktorVersion")
     implementation("io.ktor:ktor-gson:$ktorVersion")
-    implementation("com.graphql-java-kickstart:graphql-java-tools:5.7.1")
 
     implementation("org.koin:koin-core:$koinVersion")
     implementation("org.koin:koin-core-ext:$koinVersion")

@@ -12,3 +12,5 @@ sealed class AuthStatus : Principal {
         val cause: AuthenticationFailedCause
     ) : AuthStatus()
 }
+
+fun AuthStatus?.asContext(): AuthContext = (this as AuthStatus.Authorized).context
