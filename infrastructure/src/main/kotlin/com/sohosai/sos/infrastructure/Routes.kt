@@ -10,16 +10,24 @@ import io.ktor.response.respond
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.post
+import io.ktor.routing.route
 import org.koin.ktor.ext.get
 
 internal fun Routing.routes() {
     val userController = UserController(get())
     authenticate {
-        post("/users") {
-            call.respond(userController.createUser(
-                input = call.receive(),
-                context = call.principal<AuthStatus>().asContext()
-            ))
+        route("/users") {
+            get {
+                call.respond(userController.listUsers(
+                    context = call.principal<AuthStatus>().asContext()
+                ))
+            }
+            post {
+                call.respond(userController.createUser(
+                    input = call.receive(),
+                    context = call.principal<AuthStatus>().asContext()
+                ))
+            }
         }
         get("/") { call.respond(HttpStatusCode.OK) }
         get("/health-check") { call.respond(HttpStatusCode.OK) }

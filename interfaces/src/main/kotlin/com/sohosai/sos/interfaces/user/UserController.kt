@@ -3,10 +3,11 @@ package com.sohosai.sos.interfaces.user
 import com.sohosai.sos.domain.user.PhoneNumber
 import com.sohosai.sos.domain.user.Role
 import com.sohosai.sos.interfaces.AuthContext
+import com.sohosai.sos.interfaces.toUser
 import com.sohosai.sos.service.UserService
 
 class UserController(private val userService: UserService) {
-    suspend fun createUser(input: CreateUserInput, context: AuthContext): CreateUserOutput {
+    suspend fun createUser(input: CreateUserInput, context: AuthContext): UserOutput {
         val user = userService.createUser(
             name = input.name,
             kanaName = input.kanaName,
@@ -19,14 +20,12 @@ class UserController(private val userService: UserService) {
             authId = context.authId
         )
 
-        return CreateUserOutput(
-            name = user.name,
-            kanaName = user.kanaName,
-            email = user.email.value,
-            phoneNumber = user.phoneNumber.value,
-            studentId = user.studentId,
-            affiliationName = user.affiliation.name,
-            affiliationType = user.affiliation.type
-        )
+        return UserOutput.fromUser(user)
+    }
+
+    suspend fun listUsers(context: AuthContext): List<UserOutput> {
+        val users = userService.listUsers(context.toUser())
+
+        return users.map { UserOutput.fromUser(it) }
     }
 }
