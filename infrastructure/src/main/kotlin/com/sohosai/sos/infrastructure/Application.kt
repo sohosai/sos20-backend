@@ -14,11 +14,14 @@ import io.ktor.features.CORS
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DataConversion
 import io.ktor.gson.gson
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.routing.routing
 import io.ktor.server.netty.EngineMain
 import org.flywaydb.core.Flyway
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
+import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
 import kotlin.properties.Delegates
@@ -67,8 +70,11 @@ fun Application.configure() {
     }
     install(DataConversion)
     install(CORS) {
-        anyHost()
+        method(HttpMethod.Options)
+        header(HttpHeaders.Authorization)
+        header("x-requested-with")
         allowCredentials = true
+        maxAgeInSeconds = Duration.ofDays(1).seconds
     }
 
     migrateDatabase(get())
