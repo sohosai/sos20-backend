@@ -75,6 +75,7 @@ fun Application.configure() {
         header("x-requested-with")
         allowCredentials = true
         maxAgeInSeconds = Duration.ofDays(1).seconds
+        anyHost()
     }
 
     migrateDatabase(get())
