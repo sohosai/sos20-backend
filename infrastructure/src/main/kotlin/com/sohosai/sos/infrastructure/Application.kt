@@ -9,9 +9,8 @@ import io.ktor.application.Application
 import io.ktor.application.ApplicationEnvironment
 import io.ktor.application.install
 import io.ktor.auth.Authentication
-import io.ktor.auth.authentication
 import io.ktor.auth.jwt.jwt
-import io.ktor.auth.principal
+import io.ktor.features.CORS
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DataConversion
 import io.ktor.gson.gson
@@ -67,6 +66,10 @@ fun Application.configure() {
         }
     }
     install(DataConversion)
+    install(CORS) {
+        anyHost()
+        allowCredentials = true
+    }
 
     migrateDatabase(get())
 
