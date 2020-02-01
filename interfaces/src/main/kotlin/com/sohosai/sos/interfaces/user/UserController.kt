@@ -23,6 +23,10 @@ class UserController(private val userService: UserService) {
         return UserOutput.fromUser(user)
     }
 
+    suspend fun loginUser(context: AuthContext): UserOutput {
+        return UserOutput.fromUser(context.toUser())
+    }
+
     suspend fun listUsers(context: AuthContext): List<UserOutput> {
         val users = userService.listUsers(context.toUser())
 

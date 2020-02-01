@@ -30,6 +30,11 @@ internal fun Routing.routes() {
                     context = call.principal<AuthStatus>().asContext()
                 ))
             }
+            get("/login") {
+                call.respond(userController.loginUser(
+                    context = call.principal<AuthStatus>().asContext()
+                ))
+            }
         }
         route ("/projects") {
             post {
