@@ -6,6 +6,7 @@ import com.sohosai.sos.domain.project.ProjectCategory
 import java.util.*
 
 data class ProjectOutput(
+    val id: Int,
     val ownerId: UUID,
     val subOwnerId: UUID?,
     val name: String,
@@ -19,6 +20,7 @@ data class ProjectOutput(
     companion object {
         fun fromProject(project: Project): ProjectOutput {
             return ProjectOutput(
+                id = project.id,
                 ownerId = project.ownerId,
                 subOwnerId = project.subOwnerId,
                 name = project.name,

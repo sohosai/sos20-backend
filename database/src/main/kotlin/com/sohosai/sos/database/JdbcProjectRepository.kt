@@ -48,7 +48,7 @@ class JdbcProjectRepository(private val dataSource: DataSource) :
                 )
             ) { row ->
                 Project(
-                    id = row.uuid("id"),
+                    id = row.int("id"),
                     ownerId = ownerId,
                     subOwnerId = subOwnerId,
                     name = name,
@@ -71,7 +71,7 @@ class JdbcProjectRepository(private val dataSource: DataSource) :
                 )
             ) { row ->
                 Project(
-                    id = row.uuid("id"),
+                    id = row.int("id"),
                     ownerId = ownerId,
                     subOwnerId = row.uuidOrNull("sub_owner_id"),
                     name = row.string("name"),
