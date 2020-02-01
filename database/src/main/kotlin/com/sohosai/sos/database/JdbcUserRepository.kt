@@ -1,7 +1,6 @@
 package com.sohosai.sos.database
 
 import com.sohosai.sos.domain.user.*
-import com.sohosai.sos.domain.user.UserRepository
 import kotlinx.coroutines.withContext
 import kotliquery.Row
 import kotliquery.queryOf

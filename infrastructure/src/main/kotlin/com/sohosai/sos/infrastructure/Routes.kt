@@ -12,6 +12,7 @@ import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
+import io.ktor.util.getOrFail
 import org.koin.ktor.ext.get
 
 internal fun Routing.routes() {
@@ -28,6 +29,11 @@ internal fun Routing.routes() {
                 call.respond(userController.createUser(
                     input = call.receive(),
                     context = call.principal<AuthStatus>().asContext()
+                ))
+            }
+            get("/{id}") {
+                call.respond(userController.getUser(
+                    rawUserId = call.parameters.getOrFail("id")
                 ))
             }
             get("/login") {

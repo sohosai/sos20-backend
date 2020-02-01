@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  title: sos20-backend
+  version: '1.0'
+  description: ''
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /users:
+    get:
+      summary: List users
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/user.v1.yaml
+              examples: {}
+      operationId: get-users
+      security:
+        - Authorization: []
+    post:
+      summary: Create user
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/user.v1.yaml
+      operationId: post-users
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                kanaName:
+                  type: string
+                phoneNumber:
+                  type: string
+                studentId:
+                  type: string
+                affiliationName:
+                  type: string
+                affiliationType:
+                  type: string
+              required:
+                - name
+                - kanaName
+                - phoneNumber
+                - studentId
+                - affiliationName
+                - affiliationType
+  '/users/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get user by id
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/user.v1.yaml
+        '404':
+          description: "User with userId '{id}' not found."
+      operationId: get-users-id
+      security:
+        - Authorization: []
+components:
+  schemas: {}
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: Bearer

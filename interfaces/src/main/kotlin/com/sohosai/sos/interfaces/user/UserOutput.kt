@@ -2,8 +2,10 @@ package com.sohosai.sos.interfaces.user
 
 import com.sohosai.sos.domain.user.AffiliationType
 import com.sohosai.sos.domain.user.User
+import java.util.*
 
 data class UserOutput(
+    val id: UUID,
     val name: String,
     val kanaName: String,
     val email: String,
@@ -15,6 +17,7 @@ data class UserOutput(
     companion object {
         fun fromUser(user: User): UserOutput {
             return UserOutput(
+                id = user.id,
                 name = user.name,
                 kanaName = user.kanaName,
                 email = user.email.value,

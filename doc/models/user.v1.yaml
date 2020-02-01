@@ -1,0 +1,30 @@
+title: User
+type: object
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  kanaName:
+    type: string
+  email:
+    type: string
+  phoneNumber:
+    type: string
+  studentId:
+    type: string
+  affiliationName:
+    type: string
+  affiliationType:
+    $ref: ./affiliationType.v1.yaml
+required:
+  - id
+  - name
+  - kanaName
+  - email
+  - phoneNumber
+  - studentId
+  - affiliationName
+  - affiliationType
+x-tags:
+  - user

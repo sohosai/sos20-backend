@@ -2,20 +2,24 @@ package com.sohosai.sos.infrastructure
 
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
-import com.google.gson.FieldNamingPolicy
 import com.sohosai.sos.domain.user.Email
 import com.sohosai.sos.interfaces.AuthContext
+import com.sohosai.sos.service.exception.UserNotFoundException
 import io.ktor.application.Application
 import io.ktor.application.ApplicationEnvironment
+import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.CORS
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DataConversion
+import io.ktor.features.StatusPages
 import io.ktor.gson.gson
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.response.respond
 import io.ktor.routing.routing
 import io.ktor.server.netty.EngineMain
 import org.flywaydb.core.Flyway
@@ -79,6 +83,12 @@ fun Application.configure() {
     }
 
     migrateDatabase(get())
+
+    install(StatusPages) {
+        exception<UserNotFoundException> {
+            call.respond(HttpStatusCode.NotFound, it.message!!)
+        }
+    }
 
     routing {
         routes()
