@@ -3,7 +3,6 @@ package com.sohosai.sos.database
 import com.sohosai.sos.domain.project.Project
 import com.sohosai.sos.domain.project.ProjectAttribute
 import com.sohosai.sos.domain.project.ProjectCategory
-import com.sohosai.sos.domain.user.User
 import com.sohosai.sos.domain.project.ProjectRepository
 import kotlinx.coroutines.withContext
 import kotliquery.queryOf

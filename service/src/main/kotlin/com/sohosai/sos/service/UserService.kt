@@ -1,6 +1,8 @@
 package com.sohosai.sos.service
 
 import com.sohosai.sos.domain.user.*
+import com.sohosai.sos.service.exception.UserNotFoundException
+import java.util.*
 
 class UserService(private val userRepository: UserRepository) {
     suspend fun createUser(
@@ -25,6 +27,10 @@ class UserService(private val userRepository: UserRepository) {
             role = role,
             authId = authId
         )
+    }
+
+    suspend fun getUserById(userId: UUID): User {
+        return userRepository.findUserById(userId) ?: throw UserNotFoundException(userId)
     }
 
     suspend fun listUsers(viewer: User): List<User> {
