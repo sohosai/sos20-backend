@@ -55,7 +55,7 @@ paths:
                 affiliationName:
                   type: string
                 affiliationType:
-                  type: string
+                  $ref: ../models/affiliationtype.v1.yaml
               required:
                 - name
                 - kanaName
@@ -84,23 +84,6 @@ paths:
         '404':
           description: "User with userId '{id}' not found."
       operationId: get-users-id
-      security:
-        - Authorization: []
-  /users/login:
-    get:
-      summary: Auth user with idToken
-      tags:
-        - user
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: ../models/user.v1.yaml
-        '401':
-          description: User not found.
-      operationId: get-users-login
       security:
         - Authorization: []
   /projects:
@@ -148,6 +131,23 @@ paths:
                 - description
                 - category
                 - attributes
+  /users/login:
+    get:
+      summary: Auth user with idToken
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/user.v1.yaml
+        '401':
+          description: User not found.
+      operationId: get-users-login
+      security:
+        - Authorization: []
 components:
   schemas: {}
   securitySchemes:

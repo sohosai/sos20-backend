@@ -1,5 +1,7 @@
 title: User
 type: object
+x-tags:
+  - user
 properties:
   id:
     type: string
@@ -16,7 +18,7 @@ properties:
   affiliationName:
     type: string
   affiliationType:
-    $ref: ./affiliationType.v1.yaml
+    $ref: ./affiliationtype.v1.yaml
 required:
   - id
   - name
@@ -26,5 +28,3 @@ required:
   - studentId
   - affiliationName
   - affiliationType
-x-tags:
-  - user
