@@ -1,0 +1,23 @@
+title: User
+type: object
+x-examples:
+  example-1: {}
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  kanaName:
+    type: string
+  email:
+    type: string
+  phoneNumber:
+    type: string
+  studentId:
+    type: string
+  affiliationName:
+    type: string
+  affiliationType:
+    type: string
+  '':
+    type: string
