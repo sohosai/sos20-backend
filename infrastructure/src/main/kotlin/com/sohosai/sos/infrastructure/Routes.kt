@@ -1,5 +1,6 @@
 package com.sohosai.sos.infrastructure
 
+import com.sohosai.sos.interfaces.project.ProjectController
 import com.sohosai.sos.interfaces.user.UserController
 import io.ktor.application.call
 import io.ktor.auth.authenticate
@@ -15,6 +16,7 @@ import org.koin.ktor.ext.get
 
 internal fun Routing.routes() {
     val userController = UserController(get())
+    val projectController = ProjectController(get())
     authenticate {
         route("/users") {
             get {
@@ -24,6 +26,14 @@ internal fun Routing.routes() {
             }
             post {
                 call.respond(userController.createUser(
+                    input = call.receive(),
+                    context = call.principal<AuthStatus>().asContext()
+                ))
+            }
+        }
+        route ("/projects") {
+            post {
+                call.respond(projectController.createProject(
                     input = call.receive(),
                     context = call.principal<AuthStatus>().asContext()
                 ))

@@ -1,0 +1,15 @@
+version: '3'
+services:
+  postgresql:
+    image: postgres:12.1-alpine
+    environment:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB: sos
+    volumes:
+      - postgres:/var/lib/postgresql
+    ports:
+      - 5432:5432
+
+volumes:
+  gradle:
+  postgres:
