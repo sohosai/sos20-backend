@@ -3,7 +3,7 @@ package com.sohosai.sos.domain.project
 import java.util.*
 
 data class Project(
-    val id: UUID,
+    val id: Int,
     val ownerId: UUID,
     val subOwnerId: UUID?,
     val name: String,
