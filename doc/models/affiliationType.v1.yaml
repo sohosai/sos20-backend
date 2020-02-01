@@ -4,3 +4,5 @@ enum:
   - UNDERGRADUATE
   - GRADUATE
   - TEACHER
+x-tags:
+  - user

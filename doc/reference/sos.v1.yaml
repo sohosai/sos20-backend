@@ -9,7 +9,8 @@ paths:
   /users:
     get:
       summary: List users
-      tags: []
+      tags:
+        - user
       responses:
         '200':
           description: OK
@@ -25,7 +26,8 @@ paths:
         - Authorization: []
     post:
       summary: Create user
-      tags: []
+      tags:
+        - user
       responses:
         '200':
           description: OK
@@ -61,6 +63,28 @@ paths:
                 - studentId
                 - affiliationName
                 - affiliationType
+  '/users/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get user by id
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/user.v1.yaml
+        '404':
+          description: "User with userId '{id}' not found."
+      operationId: get-users-id
+      security:
+        - Authorization: []
 components:
   schemas: {}
   securitySchemes:

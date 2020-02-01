@@ -26,3 +26,5 @@ required:
   - studentId
   - affiliationName
   - affiliationType
+x-tags:
+  - user
