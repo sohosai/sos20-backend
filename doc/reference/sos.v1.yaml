@@ -2,7 +2,11 @@ openapi: 3.0.0
 info:
   title: sos20-backend
   version: '1.0'
-  description: ''
+  description: Backend for Sohosai Online System
+  contact:
+    url: 'https://sohosai.com'
+    email: jsys@sohosai.com
+  termsOfService: 'https://sohosai.com'
 servers:
   - url: 'http://localhost:8080'
 paths:
@@ -24,6 +28,7 @@ paths:
       operationId: get-users
       security:
         - Authorization: []
+      description: List users
     post:
       summary: Create user
       tags:
@@ -63,6 +68,7 @@ paths:
                 - studentId
                 - affiliationName
                 - affiliationType
+      description: Create user
   '/users/{id}':
     parameters:
       - schema:
@@ -86,6 +92,7 @@ paths:
       operationId: get-users-id
       security:
         - Authorization: []
+      description: Get user by id
   /projects:
     post:
       summary: Create project
@@ -131,6 +138,7 @@ paths:
                 - description
                 - category
                 - attributes
+      description: Create project
   /users/login:
     get:
       summary: Auth user with idToken
@@ -148,6 +156,7 @@ paths:
       operationId: get-users-login
       security:
         - Authorization: []
+      description: Auth user with idToken
 components:
   schemas: {}
   securitySchemes:

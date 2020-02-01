@@ -1,5 +1,7 @@
 title: project
 type: object
+x-tags:
+  - project
 properties:
   id:
     type: integer
@@ -27,10 +29,9 @@ required:
   - id
   - ownerId
   - name
+  - kanaName
   - groupName
   - kanaGroupName
   - description
   - category
   - attributes
-x-tags:
-  - project
