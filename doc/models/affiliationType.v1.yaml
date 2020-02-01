@@ -1,0 +1,8 @@
+type: string
+title: AffiliationType
+enum:
+  - UNDERGRADUATE
+  - GRADUATE
+  - TEACHER
+x-tags:
+  - user
