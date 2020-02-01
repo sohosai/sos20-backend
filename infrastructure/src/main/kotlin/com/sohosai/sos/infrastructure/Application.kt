@@ -64,9 +64,7 @@ fun Application.configure() {
         }
     }
     install(ContentNegotiation) {
-        gson {
-            setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        }
+        gson {}
     }
     install(DataConversion)
     install(CORS) {
