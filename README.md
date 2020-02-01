@@ -10,6 +10,14 @@ Docker を用いて実行します。 [参考(0:15~)](https://twitter.com/piepie
 docker-compose up
 ```
 
+`localhost:8080` でアプリケーションに、`localhost:5432` でPostgreSQL に接続できるようになります。
+
+### データベースを初期化したい場合
+
+```shell script
+docker-compose down --volumes
+```
+
 ## Architecture
 
 Clean Architecture + DDD っぽくしています。
