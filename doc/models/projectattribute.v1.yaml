@@ -1,0 +1,8 @@
+type: string
+title: projectAttribute
+enum:
+  - ACADEMIC
+  - ARTISTIC
+  - COMMITTEE
+x-tags:
+  - project

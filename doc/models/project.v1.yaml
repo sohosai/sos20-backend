@@ -1,0 +1,36 @@
+title: project
+type: object
+properties:
+  id:
+    type: integer
+  ownerId:
+    type: string
+  subOwnerId:
+    type: string
+  name:
+    type: string
+  kanaName:
+    type: string
+  groupName:
+    type: string
+  kanaGroupName:
+    type: string
+  description:
+    type: string
+  category:
+    $ref: ./projectcategory.v1.yaml
+  attributes:
+    type: array
+    items:
+      $ref: ./projectattribute.v1.yaml
+required:
+  - id
+  - ownerId
+  - name
+  - groupName
+  - kanaGroupName
+  - description
+  - category
+  - attributes
+x-tags:
+  - project

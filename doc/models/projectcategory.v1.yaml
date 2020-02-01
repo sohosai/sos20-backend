@@ -1,0 +1,7 @@
+type: string
+title: ProjectCategory
+enum:
+  - GENERAL
+  - STAGE
+x-tags:
+  - project

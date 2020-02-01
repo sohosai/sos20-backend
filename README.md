@@ -18,6 +18,10 @@ docker-compose up
 docker-compose down --volumes
 ```
 
+## Documentation
+
+API Spec: https://stoplight.io/p/docs/gh/sohosai/sos20-backend
+
 ## Architecture
 
 Clean Architecture + DDD っぽくしています。
