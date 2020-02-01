@@ -3,10 +3,10 @@ info:
   title: sos20-backend
   version: '1.0'
   description: Backend for Sohosai Online System
+  termsOfService: 'https://sohosai.com'
   contact:
     url: 'https://sohosai.com'
     email: jsys@sohosai.com
-  termsOfService: 'https://sohosai.com'
 servers:
   - url: 'http://localhost:8080'
 paths:
@@ -127,9 +127,7 @@ paths:
                 category:
                   $ref: ../models/projectcategory.v1.yaml
                 attributes:
-                  type: array
-                  items:
-                    $ref: ../models/projectattribute.v1.yaml
+                  $ref: ../models/projectattributes.v1.yaml
               required:
                 - name
                 - kanaName

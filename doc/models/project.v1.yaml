@@ -22,9 +22,7 @@ properties:
   category:
     $ref: ./projectcategory.v1.yaml
   attributes:
-    type: array
-    items:
-      $ref: ./projectattribute.v1.yaml
+    $ref: ./projectattributes.v1.yaml
 required:
   - id
   - ownerId

@@ -1,8 +1,10 @@
-type: string
-title: projectAttribute
+type: array
+title: projectAttributes
 enum:
   - ACADEMIC
   - ARTISTIC
   - COMMITTEE
 x-tags:
   - project
+items:
+  type: string
