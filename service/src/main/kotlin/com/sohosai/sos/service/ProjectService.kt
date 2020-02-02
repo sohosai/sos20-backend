@@ -27,7 +27,7 @@ class ProjectService(
             requireNotNull(userRepository.findUserById(subOwnerId)) { "The user not found for that id: $subOwnerId" }
         }
         projectRepository.findProjectByOwner(ownerId)?.let {
-            throw IllegalArgumentException("The user is already the owner of a project. UserId: ${ownerId}, project: ${it.id}")
+            throw IllegalArgumentException("The user already own a project. UserId: ${ownerId}, project: ${it.id}")
         }
 
         return projectRepository.createProject(

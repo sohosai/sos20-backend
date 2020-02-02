@@ -24,9 +24,10 @@ class UserController(private val userService: UserService) {
         return UserOutput.fromUser(user)
     }
 
-    suspend fun getUser(rawUserId: String): UserOutput {
+    suspend fun getUser(rawUserId: String, context: AuthContext): UserOutput {
         val user = userService.getUserById(
-            userId = UUID.fromString(rawUserId)
+            userId = UUID.fromString(rawUserId),
+            caller = context.toUser()
         )
 
         return UserOutput.fromUser(user)

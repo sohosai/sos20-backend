@@ -9,5 +9,5 @@ import org.koin.core.context.GlobalContext
 private val userRepository: UserRepository by GlobalContext.get().koin.inject()
 
 suspend fun AuthContext.toUser(): User {
-    return userRepository.findUserByAuthId(authId) ?: throw UserNotFoundException(authId)
+    return userRepository.findUserByAuthId(authId) ?: throw UserNotFoundException()
 }

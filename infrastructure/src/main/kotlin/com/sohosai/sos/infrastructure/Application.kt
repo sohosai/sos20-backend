@@ -4,6 +4,7 @@ import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.sohosai.sos.domain.user.Email
 import com.sohosai.sos.interfaces.AuthContext
+import com.sohosai.sos.service.exception.NotEnoughPermissionException
 import com.sohosai.sos.service.exception.UserNotFoundException
 import io.ktor.application.Application
 import io.ktor.application.ApplicationEnvironment
@@ -86,7 +87,13 @@ fun Application.configure() {
 
     install(StatusPages) {
         exception<UserNotFoundException> {
-            call.respond(HttpStatusCode.NotFound, it.message!!)
+            call.respond(HttpStatusCode.NotFound, it.message ?: "")
+        }
+        exception<IllegalArgumentException> {
+            call.respond(HttpStatusCode.BadRequest, "Invalid request. See server log for detail.")
+        }
+        exception<NotEnoughPermissionException> {
+            call.respond(HttpStatusCode.Forbidden, it.message ?: "")
         }
     }
 

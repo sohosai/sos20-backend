@@ -1,6 +1,7 @@
 package com.sohosai.sos.service
 
 import com.sohosai.sos.domain.user.*
+import com.sohosai.sos.service.exception.NotEnoughPermissionException
 import com.sohosai.sos.service.exception.UserNotFoundException
 import java.util.*
 
@@ -16,6 +17,10 @@ class UserService(private val userRepository: UserRepository) {
         role: Role,
         authId: String
         ): User {
+        userRepository.findUserByAuthId(authId)?.let {
+            throw IllegalArgumentException("The user with the auth id already created. See /users/login to get user info.")
+        }
+
         return userRepository.createUser(
             name = name,
             kanaName = kanaName,
@@ -29,14 +34,16 @@ class UserService(private val userRepository: UserRepository) {
         )
     }
 
-    suspend fun getUserById(userId: UUID): User {
+    suspend fun getUserById(userId: UUID, caller: User): User {
+        if (!caller.hasPrivilege(Role.COMMITTEE) && caller.id != userId) {
+            throw UserNotFoundException(userId)
+        }
         return userRepository.findUserById(userId) ?: throw UserNotFoundException(userId)
     }
 
-    suspend fun listUsers(viewer: User): List<User> {
-        if (!viewer.hasPrivilege(Role.LEADER)) {
-            // TODO: improve error handling
-            throw IllegalStateException("Not enough permission")
+    suspend fun listUsers(caller: User): List<User> {
+        if (!caller.hasPrivilege(Role.COMMITTEE)) {
+            throw NotEnoughPermissionException()
         }
 
         return userRepository.listUsers()
