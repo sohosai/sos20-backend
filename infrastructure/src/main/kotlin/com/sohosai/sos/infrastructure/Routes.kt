@@ -26,14 +26,15 @@ internal fun Routing.routes() {
                 ))
             }
             post {
-                call.respond(userController.createUser(
+                call.respond(HttpStatusCode.Created, userController.createUser(
                     input = call.receive(),
                     context = call.principal<AuthStatus>().asContext()
                 ))
             }
             get("/{id}") {
                 call.respond(userController.getUser(
-                    rawUserId = call.parameters.getOrFail("id")
+                    rawUserId = call.parameters.getOrFail("id"),
+                    context = call.principal<AuthStatus>().asContext()
                 ))
             }
             get("/login") {
@@ -44,7 +45,7 @@ internal fun Routing.routes() {
         }
         route ("/projects") {
             post {
-                call.respond(projectController.createProject(
+                call.respond(HttpStatusCode.Created, projectController.createProject(
                     input = call.receive(),
                     context = call.principal<AuthStatus>().asContext()
                 ))
