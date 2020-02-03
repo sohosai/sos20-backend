@@ -44,6 +44,11 @@ internal fun Routing.routes() {
             }
         }
         route ("/projects") {
+            get {
+                call.respond(projectController.listProjects(
+                    context = call.principal<AuthStatus>().asContext()
+                ))
+            }
             post {
                 call.respond(HttpStatusCode.Created, projectController.createProject(
                     input = call.receive(),

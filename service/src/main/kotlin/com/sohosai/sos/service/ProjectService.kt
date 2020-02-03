@@ -4,7 +4,10 @@ import com.sohosai.sos.domain.project.Project
 import com.sohosai.sos.domain.project.ProjectAttribute
 import com.sohosai.sos.domain.project.ProjectCategory
 import com.sohosai.sos.domain.project.ProjectRepository
+import com.sohosai.sos.domain.user.Role
+import com.sohosai.sos.domain.user.User
 import com.sohosai.sos.domain.user.UserRepository
+import com.sohosai.sos.service.exception.NotEnoughPermissionException
 import java.util.*
 
 class ProjectService(
@@ -41,5 +44,13 @@ class ProjectService(
             category = category,
             attributes = attributes
         )
+    }
+
+    suspend fun listProjects(caller: User): List<Project> {
+        if (!caller.hasPrivilege(Role.COMMITTEE)) {
+            throw NotEnoughPermissionException()
+        }
+
+        return projectRepository.listProjects()
     }
 }

@@ -5,6 +5,7 @@ import com.sohosai.sos.domain.project.ProjectAttribute
 import com.sohosai.sos.domain.project.ProjectCategory
 import com.sohosai.sos.domain.project.ProjectRepository
 import kotlinx.coroutines.withContext
+import kotliquery.Row
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import org.intellij.lang.annotations.Language
@@ -26,6 +27,12 @@ private val FIND_PROJECT_BY_OWNER_QUERY = """
     WHERE owner_id = ?
 """.trimIndent()
 
+@Language("sql")
+private val LIST_PROJECTS_QUERY = """
+    SELECT *
+    FROM projects
+""".trimIndent()
+
 class JdbcProjectRepository(private val dataSource: DataSource) :
     ProjectRepository {
     override suspend fun createProject(
@@ -44,21 +51,9 @@ class JdbcProjectRepository(private val dataSource: DataSource) :
                 queryOf(
                     CREATE_PROJECT_QUERY,
                     ownerId, subOwnerId, name, kanaName, groupName, kanaGroupName, description, category.name, attributes.map { it.name }.toTypedArray()
-                )
-            ) { row ->
-                Project(
-                    id = row.int("id"),
-                    ownerId = ownerId,
-                    subOwnerId = subOwnerId,
-                    name = name,
-                    kanaName = kanaName,
-                    groupName = groupName,
-                    kanaGroupName = kanaGroupName,
-                    description = description,
-                    category = category,
-                    attributes = attributes
-                )
-            }!!
+                ),
+                projectExtractor
+            )!!
         }
     }
 
@@ -67,23 +62,32 @@ class JdbcProjectRepository(private val dataSource: DataSource) :
             session.single(
                 queryOf(
                     FIND_PROJECT_BY_OWNER_QUERY, ownerId
-                )
-            ) { row ->
-                Project(
-                    id = row.int("id"),
-                    ownerId = ownerId,
-                    subOwnerId = row.uuidOrNull("sub_owner_id"),
-                    name = row.string("name"),
-                    kanaName = row.string("kana_name"),
-                    groupName = row.string("group_name"),
-                    kanaGroupName = row.string("kana_group_name"),
-                    description = row.string("description"),
-                    category = ProjectCategory.valueOf(row.string("category")),
-                    attributes = row.array<String>("attributes").map {
-                        ProjectAttribute.valueOf(it)
-                    }
-                )
-            }
+                ),
+                projectExtractor
+            )
         }
+    }
+
+    override suspend fun listProjects(): List<Project> = withContext(coroutineContext) {
+        sessionOf(dataSource).use { session ->
+            session.list(queryOf(LIST_PROJECTS_QUERY), projectExtractor)
+        }
+    }
+
+    private val projectExtractor = { row: Row ->
+        Project(
+            id = row.int("id"),
+            ownerId = row.uuid("owner_id"),
+            subOwnerId = row.uuidOrNull("sub_owner_id"),
+            name = row.string("name"),
+            kanaName = row.string("kana_name"),
+            groupName = row.string("group_name"),
+            kanaGroupName = row.string("kana_group_name"),
+            description = row.string("description"),
+            category = ProjectCategory.valueOf(row.string("category")),
+            attributes = row.array<String>("attributes").map {
+                ProjectAttribute.valueOf(it)
+            }
+        )
     }
 }

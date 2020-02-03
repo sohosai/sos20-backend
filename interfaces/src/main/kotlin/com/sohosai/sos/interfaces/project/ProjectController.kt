@@ -21,4 +21,10 @@ class ProjectController(private val projectService: ProjectService) {
 
         return ProjectOutput.fromProject(project)
     }
+
+    suspend fun listProjects(context: AuthContext): List<ProjectOutput> {
+        val projects = projectService.listProjects(context.toUser())
+
+        return projects.map { ProjectOutput.fromProject(it) }
+    }
 }
