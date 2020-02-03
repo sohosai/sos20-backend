@@ -25,6 +25,8 @@ paths:
                 items:
                   $ref: ../models/user.v1.yaml
               examples: {}
+        '403':
+          description: Forbidden
       operationId: get-users
       security:
         - Authorization: []
@@ -40,8 +42,6 @@ paths:
             application/json:
               schema:
                 $ref: ../models/user.v1.yaml
-        '403':
-          description: Forbidden
       operationId: post-users
       security:
         - Authorization: []
@@ -107,8 +107,6 @@ paths:
             application/json:
               schema:
                 $ref: ../models/project.v1.yaml
-        '403':
-          description: Forbidden
       operationId: post-projects
       security:
         - Authorization: []
@@ -153,6 +151,8 @@ paths:
                 type: array
                 items:
                   $ref: ../models/project.v1.yaml
+        '403':
+          description: Forbidden
       description: List projects
       security:
         - Authorization: []

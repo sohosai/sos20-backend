@@ -1,5 +1,5 @@
 type: array
-title: projectAttributes
+title: ProjectAttributes
 enum:
   - ACADEMIC
   - ARTISTIC
