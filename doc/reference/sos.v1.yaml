@@ -156,6 +156,8 @@ paths:
       description: List projects
       security:
         - Authorization: []
+      tags:
+        - project
   /users/login:
     get:
       summary: Auth user with idToken
