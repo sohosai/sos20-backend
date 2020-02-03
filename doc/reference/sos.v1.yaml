@@ -40,6 +40,8 @@ paths:
             application/json:
               schema:
                 $ref: ../models/user.v1.yaml
+        '403':
+          description: Forbidden
       operationId: post-users
       security:
         - Authorization: []
@@ -105,6 +107,8 @@ paths:
             application/json:
               schema:
                 $ref: ../models/project.v1.yaml
+        '403':
+          description: Forbidden
       operationId: post-projects
       security:
         - Authorization: []
@@ -137,6 +141,21 @@ paths:
                 - category
                 - attributes
       description: Create project
+    get:
+      summary: List projects
+      operationId: get-projects
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/project.v1.yaml
+      description: List projects
+      security:
+        - Authorization: []
   /users/login:
     get:
       summary: Auth user with idToken
