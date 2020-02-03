@@ -16,4 +16,6 @@ interface ProjectRepository {
     ): Project
 
     suspend fun findProjectByOwner(ownerId: UUID): Project?
+
+    suspend fun listProjects(): List<Project>
 }
