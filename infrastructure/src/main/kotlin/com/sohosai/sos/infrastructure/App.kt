@@ -96,7 +96,7 @@ fun Application.configure() {
             application.log.error(it.message, it)
         }
         exception<NotEnoughPermissionException> {
-            call.respond(HttpStatusCode.Forbidden, it.message ?: "")
+            call.respond(HttpStatusCode.Forbidden, it.message ?: "Forbidden")
         }
     }
 
