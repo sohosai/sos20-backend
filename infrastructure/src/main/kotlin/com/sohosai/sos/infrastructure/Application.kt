@@ -3,13 +3,11 @@ package com.sohosai.sos.infrastructure
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.sohosai.sos.domain.user.Email
+import com.sohosai.sos.infrastructure.application
 import com.sohosai.sos.interfaces.AuthContext
 import com.sohosai.sos.service.exception.NotEnoughPermissionException
 import com.sohosai.sos.service.exception.UserNotFoundException
-import io.ktor.application.Application
-import io.ktor.application.ApplicationEnvironment
-import io.ktor.application.call
-import io.ktor.application.install
+import io.ktor.application.*
 import io.ktor.auth.Authentication
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.CORS
@@ -90,7 +88,12 @@ fun Application.configure() {
             call.respond(HttpStatusCode.NotFound, it.message ?: "")
         }
         exception<IllegalArgumentException> {
-            call.respond(HttpStatusCode.BadRequest, "Invalid request. See server log for detail.")
+            if (env.kind == "development") {
+                call.respond(HttpStatusCode.BadRequest, it.message ?: "")
+            } else {
+                call.respond(HttpStatusCode.BadRequest, "Invalid request. See server log for detail.")
+            }
+            application.log.error(it.message, it)
         }
         exception<NotEnoughPermissionException> {
             call.respond(HttpStatusCode.Forbidden, it.message ?: "")
@@ -108,3 +111,5 @@ private fun migrateDatabase(dataSource: DataSource) {
         locations("db/migration")
     }.load().migrate()
 }
+
+private val ApplicationEnvironment.kind get() = config.property("ktor.deployment.environment").getString()
