@@ -51,9 +51,21 @@ class JdbcProjectRepository(private val dataSource: DataSource) :
                 queryOf(
                     CREATE_PROJECT_QUERY,
                     ownerId, subOwnerId, name, kanaName, groupName, kanaGroupName, description, category.name, attributes.map { it.name }.toTypedArray()
-                ),
-                projectExtractor
-            )!!
+                )
+            ) { row ->
+                Project(
+                    id = row.int("id"),
+                    ownerId = ownerId,
+                    subOwnerId = subOwnerId,
+                    name = name,
+                    kanaName = kanaName,
+                    groupName = groupName,
+                    kanaGroupName = kanaGroupName,
+                    description = description,
+                    category = category,
+                    attributes = attributes
+                )
+            }!!
         }
     }
 
