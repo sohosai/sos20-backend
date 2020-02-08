@@ -1,0 +1,6 @@
+type: string
+title: Role
+enum:
+  - GENERAL
+  - COMMITTEE
+  - ADMIN

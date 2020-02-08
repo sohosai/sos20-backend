@@ -19,6 +19,8 @@ properties:
     type: string
   affiliationType:
     $ref: ./affiliationtype.v1.yaml
+  role:
+    $ref: ./userrole.v1.yaml
 required:
   - id
   - name
@@ -28,3 +30,4 @@ required:
   - studentId
   - affiliationName
   - affiliationType
+  - role
