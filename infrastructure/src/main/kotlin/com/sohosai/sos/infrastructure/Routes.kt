@@ -65,6 +65,15 @@ internal fun Routing.routes() {
                     context = call.principal<AuthStatus>().asContext()
                 ))
             }
+            route("/{id}") {
+                post("/answers") {
+                    call.respond(HttpStatusCode.Created, applicationController.answerApplication(
+                        input = call.receive(),
+                        rawApplicationId = call.parameters.getOrFail("id"),
+                        context = call.principal<AuthStatus>().asContext()
+                    ))
+                }
+            }
         }
         get("/") { call.respond(HttpStatusCode.OK) }
         get("/health-check") { call.respond(HttpStatusCode.OK) }

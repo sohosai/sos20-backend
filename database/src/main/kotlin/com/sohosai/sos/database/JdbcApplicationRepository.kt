@@ -2,9 +2,11 @@ package com.sohosai.sos.database
 
 import com.sohosai.sos.domain.application.Application
 import com.sohosai.sos.domain.application.ApplicationRepository
+import com.sohosai.sos.domain.application.answer.ApplicationItemAnswer
 import com.sohosai.sos.domain.application.condition.ApplicationConditions
 import com.sohosai.sos.domain.application.item.ApplicationItem
 import com.sohosai.sos.domain.application.json.ApplicationConditionsJson
+import com.sohosai.sos.domain.application.json.ApplicationItemAnswerJson
 import com.sohosai.sos.domain.application.json.ApplicationItemJson
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -24,12 +26,19 @@ private val moshi = Moshi.Builder().apply {
 }.build()
 private val itemsAdapter: JsonAdapter<List<ApplicationItemJson>> = moshi.adapter(Types.newParameterizedType(List::class.java, ApplicationItemJson::class.java))
 private val conditionsAdapter: JsonAdapter<ApplicationConditionsJson> = moshi.adapter(ApplicationConditionsJson::class.java)
+private val answersAdapter: JsonAdapter<List<ApplicationItemAnswerJson>> = moshi.adapter(Types.newParameterizedType(List::class.java, ApplicationItemAnswerJson::class.java))
 
 @Language("sql")
 private val CREATE_APPLICATION_QUERY = """
     INSERT INTO applications(name, description, author_id, items, conditions)
     VALUES (?, ?, ?, CAST(? AS jsonb), CAST(? AS jsonb))
     RETURNING id
+""".trimIndent()
+
+@Language("sql")
+private val CREATE_APPLICATION_ANSWER_QUERY = """
+    INSERT INTO application_answers(application_id, project_id, answers)
+    VALUES (?, ?, CAST(? as jsonb))
 """.trimIndent()
 
 class JdbcApplicationRepository(private val dataSource: DataSource) : ApplicationRepository {
@@ -59,6 +68,23 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
                     conditions = conditions
                 )
             }!!
+        }
+    }
+
+    override suspend fun createApplicationAnswer(
+        applicationId: Int,
+        projectId: Int,
+        answers: List<ApplicationItemAnswer>
+    ) {
+        val answersJson = answersAdapter.toJson(answers.map { ApplicationItemAnswerJson.fromApplicationItemAnswer(it) })
+
+        sessionOf(dataSource).use { session ->
+            session.execute(
+                queryOf(
+                    CREATE_APPLICATION_ANSWER_QUERY,
+                    applicationId, projectId, answersJson
+                )
+            )
         }
     }
 }
