@@ -12,7 +12,7 @@ import com.sohosai.sos.domain.project.ProjectCategory
 data class ApplicationConditionJson(
     val kind: ApplicationConditionKind,
     val applicationId: Int? = null,
-    val itemCondition: ApplicationItemConditions? = null,
+    val itemConditions: ApplicationItemConditions? = null,
     val category: ProjectCategory? = null,
     val attributes: List<ProjectAttribute>? = null
 ) {
@@ -26,7 +26,7 @@ data class ApplicationConditionJson(
                 is ApplicationConditionAnsweredItem -> ApplicationConditionJson(
                     kind = ApplicationConditionKind.ANSWERED_APPLICATION_ITEM,
                     applicationId = condition.applicationId,
-                    itemCondition = condition.itemCondition
+                    itemConditions = condition.itemConditions
                 )
                 is ApplicationConditionCategory -> ApplicationConditionJson(
                     kind = ApplicationConditionKind.PROJECT_CATEGORY,
@@ -47,7 +47,7 @@ data class ApplicationConditionJson(
             )
             ApplicationConditionKind.ANSWERED_APPLICATION_ITEM -> ApplicationConditionAnsweredItem(
                 applicationId = requireNotNull(applicationId),
-                itemCondition = requireNotNull(itemCondition)
+                itemConditions = requireNotNull(itemConditions)
             )
             ApplicationConditionKind.PROJECT_CATEGORY -> ApplicationConditionCategory(
                 category = requireNotNull(category)

@@ -1,4 +1,6 @@
 package com.sohosai.sos.domain.application.item
 
-class ApplicationItemOption {
-}
+data class ApplicationItemOption(
+    val optionId: Int,
+    val name: String
+)
