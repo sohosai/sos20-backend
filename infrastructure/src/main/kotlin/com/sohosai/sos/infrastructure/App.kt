@@ -4,6 +4,7 @@ import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.sohosai.sos.domain.user.Email
 import com.sohosai.sos.interfaces.AuthContext
+import com.sohosai.sos.interfaces.HttpStatusCodeException
 import com.sohosai.sos.service.exception.NotEnoughPermissionException
 import com.sohosai.sos.service.exception.UserNotFoundException
 import io.ktor.application.*
@@ -96,6 +97,9 @@ fun Application.configure() {
         }
         exception<NotEnoughPermissionException> {
             call.respond(HttpStatusCode.Forbidden, it.message ?: "Forbidden")
+        }
+        exception<HttpStatusCodeException> {
+            call.respond(HttpStatusCode.fromValue(it.code), it.message ?: "")
         }
     }
 
