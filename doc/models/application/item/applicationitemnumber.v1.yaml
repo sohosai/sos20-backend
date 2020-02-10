@@ -1,0 +1,28 @@
+title: ApplicationItemNumber
+type: object
+properties:
+  kind:
+    $ref: ./applicationitemkind.v1.yaml
+  id:
+    type: integer
+  name:
+    type: string
+  description:
+    type: string
+  conditions:
+    $ref: ./applicationitemconditions.v1.yaml
+  min:
+    type: number
+  max:
+    type:
+      - string
+      - number
+  placeHolder:
+    type: string
+required:
+  - kind
+  - id
+  - name
+  - description
+  - min
+  - max

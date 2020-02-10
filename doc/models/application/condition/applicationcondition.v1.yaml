@@ -1,0 +1,6 @@
+title: ApplicationCondition
+oneOf:
+  - $ref: ./applicationconditionanswered.v1.yaml
+  - $ref: ./applicationconditionanswereditem.v1.yaml
+  - $ref: ./applicationconditioncategory.v1.yaml
+  - $ref: ./applicationconditionattributes.v1.yaml

@@ -176,6 +176,22 @@ paths:
       security:
         - Authorization: []
       description: Auth user with idToken
+  /applications:
+    post:
+      summary: Create Application
+      operationId: post-applications
+      responses:
+        '200':
+          description: OK
+      description: Create Application
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
 components:
   schemas: {}
   securitySchemes:

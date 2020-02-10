@@ -1,0 +1,10 @@
+title: ApplicationConditionAttributes
+type: object
+properties:
+  kind:
+    $ref: ./applicationconditionkind.v1.yaml
+  attributes:
+    $ref: ../../projectattributes.v1.yaml
+required:
+  - kind
+  - attributes

@@ -1,0 +1,12 @@
+title: ApplicationConditions
+type: object
+properties:
+  op:
+    $ref: ../applicationconditionsop.v1.yaml
+  conditions:
+    type: array
+    items:
+      $ref: ./applicationcondition.v1.yaml
+required:
+  - op
+  - conditions

@@ -1,0 +1,23 @@
+title: ApplicationItemSingleChoice
+type: object
+properties:
+  kind:
+    $ref: ./applicationitemkind.v1.yaml
+  id:
+    type: integer
+  name:
+    type: string
+  description:
+    type: string
+  conditions:
+    $ref: ./applicationitemconditions.v1.yaml
+  options:
+    type: array
+    items:
+      $ref: ./applicationitemoption.v1.yaml
+required:
+  - kind
+  - id
+  - name
+  - description
+  - options

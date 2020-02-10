@@ -1,0 +1,10 @@
+title: ApplicationConditionCategory
+type: object
+properties:
+  kind:
+    $ref: ./applicationconditionkind.v1.yaml
+  category:
+    $ref: ../../projectcategory.v1.yaml
+required:
+  - kind
+  - category

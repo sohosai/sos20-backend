@@ -1,0 +1,7 @@
+oneOf:
+  - $ref: ./applicationitemtext.v1.yaml
+  - $ref: ./applicationitemnumber.v1.yaml
+  - $ref: ./applicationitemsinglechoice.v1.yaml
+  - $ref: ./applicationitemmultiplechoice.v1.yaml
+  - $ref: ./applicationitemfile.v1.yaml
+title: ApplicationItem

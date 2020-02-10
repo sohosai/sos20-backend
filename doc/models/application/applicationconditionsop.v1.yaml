@@ -1,0 +1,5 @@
+type: string
+title: ApplicationConditionsOp
+enum:
+  - AND
+  - OP

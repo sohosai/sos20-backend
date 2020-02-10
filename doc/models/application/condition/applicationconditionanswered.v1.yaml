@@ -1,0 +1,10 @@
+title: ApplicationConditionAnswered
+type: object
+properties:
+  kind:
+    $ref: ./applicationconditionkind.v1.yaml
+  applicationId:
+    type: integer
+required:
+  - kind
+  - applicationId

@@ -1,0 +1,8 @@
+type: string
+title: ApplicationItemKind
+enum:
+  - TEXT
+  - NUMBER
+  - SINGLE_CHOICE
+  - MULTIPLE_CHOICE
+  - FILE

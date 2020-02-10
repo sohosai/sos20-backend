@@ -1,0 +1,7 @@
+type: string
+title: ApplicationConditionKind
+enum:
+  - ANSWERED_APPLICATION
+  - ANSWERED_APPLICATION_ITEM
+  - PROJECT_CATEGORY
+  - PROJECT_ATTRIBUTES

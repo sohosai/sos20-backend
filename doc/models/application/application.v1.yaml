@@ -1,0 +1,24 @@
+title: Application
+type: object
+properties:
+  id:
+    type: integer
+  name:
+    type: string
+  description:
+    type: string
+  authorId:
+    type: string
+  items:
+    type: array
+    items:
+      $ref: ./item/applicationitem.v1.yaml
+  conditions:
+    $ref: ./condition/applicationcondition.v1.yaml
+required:
+  - id
+  - name
+  - description
+  - authorId
+  - items
+  - conditions
