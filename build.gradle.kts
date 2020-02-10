@@ -13,6 +13,8 @@ subprojects {
     dependencies {
         implementation(kotlin("stdlib-jdk8"))
         implementation( "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")
+        implementation("com.squareup.moshi:moshi:1.9.2")
+        implementation("com.squareup.moshi:moshi-kotlin:1.9.2")
         implementation("ch.qos.logback:logback-classic:1.2.3")
     }
 

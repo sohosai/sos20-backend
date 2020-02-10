@@ -3,7 +3,6 @@ package com.sohosai.sos.infrastructure
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.sohosai.sos.domain.user.Email
-import com.sohosai.sos.infrastructure.application
 import com.sohosai.sos.interfaces.AuthContext
 import com.sohosai.sos.service.exception.NotEnoughPermissionException
 import com.sohosai.sos.service.exception.UserNotFoundException
@@ -67,7 +66,7 @@ fun Application.configure() {
         }
     }
     install(ContentNegotiation) {
-        gson {}
+        gson { }
     }
     install(DataConversion)
     install(CORS) {
@@ -96,7 +95,7 @@ fun Application.configure() {
             application.log.error(it.message, it)
         }
         exception<NotEnoughPermissionException> {
-            call.respond(HttpStatusCode.Forbidden, it.message ?: "")
+            call.respond(HttpStatusCode.Forbidden, it.message ?: "Forbidden")
         }
     }
 
