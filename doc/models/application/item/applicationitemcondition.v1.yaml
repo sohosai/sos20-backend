@@ -1,0 +1,13 @@
+title: ApplicationItemCondition
+type: object
+properties:
+  itemId:
+    type: integer
+  optionId:
+    type: integer
+  shouldBeSelected:
+    type: string
+required:
+  - itemId
+  - optionId
+  - shouldBeSelected

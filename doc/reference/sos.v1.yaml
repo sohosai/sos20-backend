@@ -183,6 +183,12 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/application/application.v1.yaml
+        '400':
+          description: Bad Request
       description: Create Application
       security:
         - Authorization: []
@@ -191,7 +197,24 @@ paths:
           application/json:
             schema:
               type: object
-              properties: {}
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                items:
+                  type: array
+                  items:
+                    $ref: ../models/application/item/applicationitem.v1.yaml
+                conditions:
+                  $ref: ../models/application/condition/applicationconditions.v1.yaml
+              required:
+                - name
+                - description
+                - items
+                - conditions
+      tags:
+        - application
 components:
   schemas: {}
   securitySchemes:
