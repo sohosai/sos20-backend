@@ -28,6 +28,13 @@ private val FIND_PROJECT_BY_OWNER_QUERY = """
 """.trimIndent()
 
 @Language("sql")
+private val FIND_PROJECT_BY_SUB_OWNER_QUERY = """
+    SELECT *
+    FROM projects
+    WHERE sub_owner_id = ?
+""".trimIndent()
+
+@Language("sql")
 private val LIST_PROJECTS_QUERY = """
     SELECT *
     FROM projects
@@ -74,6 +81,17 @@ class JdbcProjectRepository(private val dataSource: DataSource) :
             session.single(
                 queryOf(
                     FIND_PROJECT_BY_OWNER_QUERY, ownerId
+                ),
+                projectExtractor
+            )
+        }
+    }
+
+    override suspend fun findProjectBySubOwner(subOwnerId: UUID): Project? = withContext(coroutineContext) {
+        sessionOf(dataSource).use { session ->
+            session.single(
+                queryOf(
+                    FIND_PROJECT_BY_SUB_OWNER_QUERY, subOwnerId
                 ),
                 projectExtractor
             )

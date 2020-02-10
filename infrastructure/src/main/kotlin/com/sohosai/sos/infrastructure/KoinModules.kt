@@ -19,7 +19,7 @@ object KoinModules {
     fun dev() = database() + repositories() + services()
 
     private fun services() = module {
-        single { UserService(get()) }
+        single<UserService>()
         single<ProjectService>()
         single<ApplicationService>()
     }

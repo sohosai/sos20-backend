@@ -1,11 +1,13 @@
 package com.sohosai.sos.service
 
+import com.sohosai.sos.domain.project.Project
+import com.sohosai.sos.domain.project.ProjectRepository
 import com.sohosai.sos.domain.user.*
 import com.sohosai.sos.service.exception.NotEnoughPermissionException
 import com.sohosai.sos.service.exception.UserNotFoundException
 import java.util.*
 
-class UserService(private val userRepository: UserRepository) {
+class UserService(private val userRepository: UserRepository, private val projectRepository: ProjectRepository) {
     suspend fun createUser(
         name: String,
         kanaName: String,
@@ -47,5 +49,13 @@ class UserService(private val userRepository: UserRepository) {
         }
 
         return userRepository.listUsers()
+    }
+
+    suspend fun findOwningProject(caller: User): Project? {
+        return projectRepository.findProjectByOwner(caller.id)
+    }
+
+    suspend fun findSubOwningProject(caller: User): Project? {
+        return projectRepository.findProjectBySubOwner(caller.id)
     }
 }

@@ -3,6 +3,7 @@ package com.sohosai.sos.interfaces.user
 import com.sohosai.sos.domain.user.PhoneNumber
 import com.sohosai.sos.domain.user.Role
 import com.sohosai.sos.interfaces.AuthContext
+import com.sohosai.sos.interfaces.project.ProjectOutput
 import com.sohosai.sos.interfaces.toUser
 import com.sohosai.sos.service.UserService
 import java.util.*
@@ -41,5 +42,17 @@ class UserController(private val userService: UserService) {
         val users = userService.listUsers(context.toUser())
 
         return users.map { UserOutput.fromUser(it) }
+    }
+
+    suspend fun getOwningProject(context: AuthContext): ProjectOutput? {
+        return userService.findOwningProject(context.toUser())?.let {
+            ProjectOutput.fromProject(it)
+        }
+    }
+
+    suspend fun getSubOwningProject(context: AuthContext): ProjectOutput? {
+        return userService.findSubOwningProject(context.toUser())?.let {
+            ProjectOutput.fromProject(it)
+        }
     }
 }
