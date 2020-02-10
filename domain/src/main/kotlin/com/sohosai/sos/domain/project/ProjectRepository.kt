@@ -15,6 +15,8 @@ interface ProjectRepository {
         attributes: List<ProjectAttribute>
     ): Project
 
+    suspend fun findById(id: Int): Project?
+
     suspend fun findProjectByOwner(ownerId: UUID): Project?
 
     suspend fun listProjects(): List<Project>

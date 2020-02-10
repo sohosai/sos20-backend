@@ -21,6 +21,13 @@ private val CREATE_PROJECT_QUERY = """
 """.trimIndent()
 
 @Language("sql")
+private val FIND_PROJECT_BY_ID_QUERY = """
+    SELECT *
+    FROM projects
+    WHERE id = ?
+""".trimIndent()
+
+@Language("sql")
 private val FIND_PROJECT_BY_OWNER_QUERY = """
     SELECT *
     FROM projects
@@ -66,6 +73,17 @@ class JdbcProjectRepository(private val dataSource: DataSource) :
                     attributes = attributes
                 )
             }!!
+        }
+    }
+
+    override suspend fun findById(id: Int): Project? = withContext(coroutineContext) {
+        sessionOf(dataSource).use { session ->
+            session.single(
+                queryOf(
+                    FIND_PROJECT_BY_ID_QUERY, id
+                ),
+                projectExtractor
+            )
         }
     }
 
