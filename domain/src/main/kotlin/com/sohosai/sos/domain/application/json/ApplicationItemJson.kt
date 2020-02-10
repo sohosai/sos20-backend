@@ -19,7 +19,7 @@ data class ApplicationItemJson(
     val max: Int? = null,
     val options: List<ApplicationItemOption>? = null,
     val labels: List<ApplicationItemOptionLabel>? = null,
-    val allowedType: List<String>? = null,
+    val allowedTypes: List<String>? = null,
     val isMultipleAllowed: Boolean? = null
 ) {
     companion object {
@@ -68,7 +68,7 @@ data class ApplicationItemJson(
                     name = item.name,
                     description = item.description,
                     conditions = item.conditions,
-                    allowedType = item.allowedType,
+                    allowedTypes = item.allowedTypes,
                     isMultipleAllowed = item.isMultipleAllowed
                 )
                 else -> TODO("")
@@ -115,7 +115,7 @@ data class ApplicationItemJson(
                 name = name,
                 description = description,
                 conditions = conditions,
-                allowedType = requireNotNull(allowedType),
+                allowedTypes = requireNotNull(allowedTypes),
                 isMultipleAllowed = requireNotNull(isMultipleAllowed)
             )
         }
