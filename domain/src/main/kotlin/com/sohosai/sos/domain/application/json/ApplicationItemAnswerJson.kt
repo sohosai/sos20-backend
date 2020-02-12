@@ -25,12 +25,17 @@ data class ApplicationItemAnswerJson(
                     itemId = answer.itemId,
                     value = answer.value
                 )
+                is ApplicationItemAnswerMultipleChoice -> ApplicationItemAnswerJson(
+                    kind = ApplicationItemKind.SINGLE_CHOICE,
+                    itemId = answer.itemId,
+                    selectedOptionId = answer.selectedOptionId
+                )
                 is ApplicationItemAnswerSingleChoice -> ApplicationItemAnswerJson(
                     kind = ApplicationItemKind.SINGLE_CHOICE,
                     itemId = answer.itemId,
                     selectedOptionId = answer.selectedOptionId
                 )
-                is ApplicationItemAnswerMultipleChoice -> ApplicationItemAnswerJson(
+                is ApplicationItemAnswerLabeledSingleChoice -> ApplicationItemAnswerJson(
                     kind = ApplicationItemKind.MULTIPLE_CHOICE,
                     itemId = answer.itemId,
                     selectedOptionMap = answer.selectedOptionMap
@@ -54,11 +59,15 @@ data class ApplicationItemAnswerJson(
                 itemId = itemId,
                 value = requireNotNull(value)
             )
-            ApplicationItemKind.SINGLE_CHOICE -> ApplicationItemAnswerSingleChoice(
+            ApplicationItemKind.MULTIPLE_CHOICE -> ApplicationItemAnswerMultipleChoice(
                 itemId = itemId,
                 selectedOptionId = requireNotNull(selectedOptionId)
             )
-            ApplicationItemKind.MULTIPLE_CHOICE -> ApplicationItemAnswerMultipleChoice(
+            ApplicationItemKind.SINGLE_CHOICE -> ApplicationItemAnswerMultipleChoice(
+                itemId = itemId,
+                selectedOptionId = requireNotNull(selectedOptionId)
+            )
+            ApplicationItemKind.LABELED_SINGLE_CHOICE -> ApplicationItemAnswerLabeledSingleChoice(
                 itemId = itemId,
                 selectedOptionMap = requireNotNull(selectedOptionMap)
             )

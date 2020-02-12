@@ -45,6 +45,14 @@ data class ApplicationItemJson(
                     max = item.max,
                     placeHolder = item.placeHolder
                 )
+                is MultipleChoiceApplicationItem -> ApplicationItemJson(
+                    kind = ApplicationItemKind.SINGLE_CHOICE,
+                    id = item.id,
+                    name = item.name,
+                    description = item.description,
+                    conditions = item.conditions,
+                    options = item.options
+                )
                 is SingleChoiceApplicationItem -> ApplicationItemJson(
                     kind = ApplicationItemKind.SINGLE_CHOICE,
                     id = item.id,
@@ -53,7 +61,7 @@ data class ApplicationItemJson(
                     conditions = item.conditions,
                     options = item.options
                 )
-                is MultipleChoiceApplicationItem -> ApplicationItemJson(
+                is LabeledSingleChoiceApplicationItem -> ApplicationItemJson(
                     kind = ApplicationItemKind.MULTIPLE_CHOICE,
                     id = item.id,
                     name = item.name,
@@ -95,6 +103,13 @@ data class ApplicationItemJson(
                 max = requireNotNull(max),
                 placeHolder = placeHolder
             )
+            ApplicationItemKind.MULTIPLE_CHOICE -> MultipleChoiceApplicationItem(
+                id = id,
+                name = name,
+                description = description,
+                conditions = conditions,
+                options = requireNotNull(options)
+            )
             ApplicationItemKind.SINGLE_CHOICE -> SingleChoiceApplicationItem(
                 id = id,
                 name = name,
@@ -102,7 +117,7 @@ data class ApplicationItemJson(
                 conditions = conditions,
                 options = requireNotNull(options)
             )
-            ApplicationItemKind.MULTIPLE_CHOICE -> MultipleChoiceApplicationItem(
+            ApplicationItemKind.LABELED_SINGLE_CHOICE -> LabeledSingleChoiceApplicationItem(
                 id = id,
                 name = name,
                 description = description,
