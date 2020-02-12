@@ -320,6 +320,27 @@ paths:
       security:
         - Authorization: []
       description: Get project members
+  '/applications/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get application
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/application/application.v1.yaml
+      operationId: get-applications-id
+      description: Get application
+      security:
+        - Authorization: []
 components:
   schemas: {}
   securitySchemes:
