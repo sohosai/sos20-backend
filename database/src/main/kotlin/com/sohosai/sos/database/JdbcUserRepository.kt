@@ -31,6 +31,13 @@ private val FIND_USER_BY_ID_QUERY = """
 """.trimIndent()
 
 @Language("sql")
+private val FIND_USERS_BY_ID_QUERY = """
+    SELECT id, name, kana_name, email, phone_number, student_id, affiliation_name, affiliation_type, role
+    FROM users
+    WHERE id IN (?)
+""".trimIndent()
+
+@Language("sql")
 private val FIND_USER_BY_AUTH_ID_QUERY = """
     SELECT id, name, kana_name, email, phone_number, student_id, affiliation_name, affiliation_type, role
     FROM users
@@ -81,6 +88,13 @@ class JdbcUserRepository(private val dataSource: DataSource) :
     override suspend fun findUserById(id: UUID): User? = withContext(coroutineContext) {
         sessionOf(dataSource).use { session ->
             session.single(queryOf(FIND_USER_BY_ID_QUERY, id), userExtractor)
+        }
+    }
+
+    override suspend fun findUsersById(ids: List<UUID>): List<User> = withContext(coroutineContext) {
+        val query = FIND_USERS_BY_ID_QUERY.replace("?", ids.joinToString(", ") { "?" })
+        sessionOf(dataSource).use { session ->
+            session.list(queryOf(query, *ids.toTypedArray()), userExtractor)
         }
     }
 

@@ -19,5 +19,7 @@ interface UserRepository {
 
     suspend fun findUserById(id: UUID): User?
 
+    suspend fun findUsersById(ids: List<UUID>): List<User>
+
     suspend fun findUserByAuthId(authId: String): User?
 }

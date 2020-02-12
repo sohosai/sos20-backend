@@ -2,7 +2,6 @@ package com.sohosai.sos.interfaces
 
 import com.sohosai.sos.domain.user.User
 import com.sohosai.sos.domain.user.UserRepository
-import com.sohosai.sos.service.exception.UserNotFoundException
 import org.koin.core.context.GlobalContext
 
 // TODO: inject this by right way

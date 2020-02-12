@@ -37,4 +37,13 @@ class ProjectController(private val projectService: ProjectService) {
 
         return projects.map { ProjectOutput.fromProject(it) }
     }
+
+    suspend fun getProjectMembers(rawId: String, context: AuthContext): ProjectMembersOutput {
+        val members = projectService.getProjectMembers(
+            projectId = rawId.toInt(),
+            caller = context.toUser()
+        )
+
+        return ProjectMembersOutput.fromProjectMembers(members)
+    }
 }

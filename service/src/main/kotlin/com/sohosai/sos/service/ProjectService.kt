@@ -1,9 +1,6 @@
 package com.sohosai.sos.service
 
-import com.sohosai.sos.domain.project.Project
-import com.sohosai.sos.domain.project.ProjectAttribute
-import com.sohosai.sos.domain.project.ProjectCategory
-import com.sohosai.sos.domain.project.ProjectRepository
+import com.sohosai.sos.domain.project.*
 import com.sohosai.sos.domain.user.Role
 import com.sohosai.sos.domain.user.User
 import com.sohosai.sos.domain.user.UserRepository
@@ -62,5 +59,24 @@ class ProjectService(
         }
 
         return projectRepository.listProjects()
+    }
+
+    suspend fun getProjectMembers(projectId: Int, caller: User): ProjectMembers {
+        val project = projectRepository.findById(projectId) ?: throw IllegalArgumentException("Project not found. projectId: $projectId")
+        if (project.ownerId != caller.id && project.subOwnerId != caller.id && !caller.hasPrivilege(Role.COMMITTEE)) {
+            throw IllegalArgumentException("Project not found. projectId: $projectId")
+        }
+
+        val ids = mutableListOf(project.ownerId).apply {
+            if (project.subOwnerId != null) {
+                add(project.subOwnerId!!)
+            }
+        }
+        val members = userRepository.findUsersById(ids)
+
+        return ProjectMembers(
+            owner = members[0],
+            subOwner = members.getOrNull(1)
+        )
     }
 }
