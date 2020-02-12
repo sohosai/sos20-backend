@@ -9,6 +9,7 @@ data class ApplicationItemAnswerJson(
     val content: String? = null,
     val value: Int? = null,
     val selectedOptionId: Int? = null,
+    val selectedOptionIds: List<Int>? = null,
     val selectedOptionMap: Map<Int, Int>? = null,
     val resourceIds: List<String>? = null
 ) {
@@ -28,7 +29,7 @@ data class ApplicationItemAnswerJson(
                 is ApplicationItemAnswerMultipleChoice -> ApplicationItemAnswerJson(
                     kind = ApplicationItemKind.SINGLE_CHOICE,
                     itemId = answer.itemId,
-                    selectedOptionId = answer.selectedOptionId
+                    selectedOptionIds = answer.selectedOptionIds
                 )
                 is ApplicationItemAnswerSingleChoice -> ApplicationItemAnswerJson(
                     kind = ApplicationItemKind.SINGLE_CHOICE,
@@ -61,9 +62,9 @@ data class ApplicationItemAnswerJson(
             )
             ApplicationItemKind.MULTIPLE_CHOICE -> ApplicationItemAnswerMultipleChoice(
                 itemId = itemId,
-                selectedOptionId = requireNotNull(selectedOptionId)
+                selectedOptionIds = requireNotNull(selectedOptionIds)
             )
-            ApplicationItemKind.SINGLE_CHOICE -> ApplicationItemAnswerMultipleChoice(
+            ApplicationItemKind.SINGLE_CHOICE -> ApplicationItemAnswerSingleChoice(
                 itemId = itemId,
                 selectedOptionId = requireNotNull(selectedOptionId)
             )
