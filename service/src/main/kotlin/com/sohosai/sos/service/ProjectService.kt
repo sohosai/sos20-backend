@@ -46,6 +46,16 @@ class ProjectService(
         )
     }
 
+    suspend fun getProject(id: Int, caller: User): Project? {
+        val project = projectRepository.findById(id) ?: return null
+
+        return if (project.ownerId == caller.id || project.subOwnerId == caller.id || caller.hasPrivilege(Role.COMMITTEE)) {
+            project
+        } else {
+            null
+        }
+    }
+
     suspend fun listProjects(caller: User): List<Project> {
         if (!caller.hasPrivilege(Role.COMMITTEE)) {
             throw NotEnoughPermissionException()

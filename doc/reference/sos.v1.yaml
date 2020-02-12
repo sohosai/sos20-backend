@@ -276,6 +276,28 @@ paths:
       security:
         - Authorization: []
       description: "Get user's sub-owning project"
+  '/projects/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get project
+      tags:
+        - project
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/project.v1.yaml
+      operationId: get-projects-id
+      description: Get project
+      security:
+        - Authorization: []
 components:
   schemas: {}
   securitySchemes:
