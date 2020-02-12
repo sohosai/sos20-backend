@@ -298,6 +298,28 @@ paths:
       description: Get project
       security:
         - Authorization: []
+  '/projects/{id}/members':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get project members
+      tags:
+        - project
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/project/projectmembers.v1.yaml
+      operationId: get-projects-id-members
+      security:
+        - Authorization: []
+      description: Get project members
 components:
   schemas: {}
   securitySchemes:

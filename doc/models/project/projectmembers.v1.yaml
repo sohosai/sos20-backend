@@ -1,0 +1,12 @@
+title: ProjectMembers
+type: object
+description: ''
+properties:
+  owner:
+    $ref: ../user.v1.yaml
+  subOwner:
+    $ref: ../user.v1.yaml
+required:
+  - owner
+x-tags:
+  - project
