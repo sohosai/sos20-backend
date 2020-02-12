@@ -215,6 +215,67 @@ paths:
                 - conditions
       tags:
         - application
+    get:
+      summary: List Applications
+      operationId: get-applications
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/application/application.v1.yaml
+      security:
+        - Authorization: []
+      tags:
+        - application
+      description: List Applications
+  '/users/{id}/project':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: "Get user's owning project"
+      tags:
+        - project
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/project.v1.yaml
+      operationId: get-users-id-project
+      security:
+        - Authorization: []
+      description: "Get user's owning project"
+  '/users/{id}/subown-project':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: "Get user's sub-owning project"
+      tags:
+        - project
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/project.v1.yaml
+      operationId: get-users-id-subown-project
+      security:
+        - Authorization: []
+      description: "Get user's sub-owning project"
 components:
   schemas: {}
   securitySchemes:

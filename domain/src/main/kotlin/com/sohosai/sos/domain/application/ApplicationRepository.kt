@@ -14,6 +14,8 @@ interface ApplicationRepository {
         conditions: ApplicationConditions
     ): Application
 
+    suspend fun listApplications(): List<Application>
+
     suspend fun createApplicationAnswer(
         applicationId: Int,
         projectId: Int,

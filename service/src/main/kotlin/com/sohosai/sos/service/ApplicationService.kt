@@ -31,6 +31,16 @@ class ApplicationService(private val applicationRepository: ApplicationRepositor
         )
     }
 
+    suspend fun listApplications(
+        caller: User
+    ): List<Application> {
+        if (!caller.hasPrivilege(Role.COMMITTEE)) {
+            throw NotEnoughPermissionException()
+        }
+
+        return applicationRepository.listApplications()
+    }
+
     suspend fun answerApplication(
         applicationId: Int,
         projectId: Int,

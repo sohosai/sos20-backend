@@ -5,6 +5,9 @@ properties:
     $ref: ./applicationconditionkind.v1.yaml
   applicationId:
     type: integer
+  shouldBeSelected:
+    type: boolean
 required:
   - kind
   - applicationId
+  - shouldBeSelected
