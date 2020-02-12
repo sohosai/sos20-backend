@@ -31,6 +31,12 @@ class ApplicationService(private val applicationRepository: ApplicationRepositor
         )
     }
 
+    suspend fun getApplication(
+        id: Int
+    ): Application? {
+        return applicationRepository.findApplicationById(id)
+    }
+
     suspend fun listApplications(
         caller: User
     ): List<Application> {

@@ -14,6 +14,10 @@ interface ApplicationRepository {
         conditions: ApplicationConditions
     ): Application
 
+    suspend fun findApplicationById(
+        id: Int
+    ): Application?
+
     suspend fun listApplications(): List<Application>
 
     suspend fun createApplicationAnswer(
