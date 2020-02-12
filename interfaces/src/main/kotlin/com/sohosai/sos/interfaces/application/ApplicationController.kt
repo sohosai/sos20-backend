@@ -13,6 +13,12 @@ class ApplicationController(private val applicationService: ApplicationService) 
         return applicationService.createApplication(input.name, input.description, items, conditions, context.toUser())
     }
 
+    suspend fun listApplications(context: AuthContext): List<Application> {
+        return applicationService.listApplications(
+            caller = context.toUser()
+        )
+    }
+
     suspend fun answerApplication(input: AnswerApplicationInput, rawApplicationId: String, context: AuthContext) {
         val answers = input.answers.map { it.toApplicationItemAnswer() }
 

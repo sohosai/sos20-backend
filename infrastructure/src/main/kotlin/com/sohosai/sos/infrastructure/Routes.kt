@@ -59,6 +59,11 @@ internal fun Routing.routes() {
             }
         }
         route ("/applications") {
+            get("/") {
+                call.respond(applicationController.listApplications(
+                    context = call.principal<AuthStatus>().asContext()
+                ))
+            }
             post("/") {
                 call.respond(applicationController.createApplication(
                     input = call.receive(),

@@ -36,6 +36,12 @@ private val CREATE_APPLICATION_QUERY = """
 """.trimIndent()
 
 @Language("sql")
+private val LIST_APPLICATIONS_QUERY = """
+    SELECT *
+    FROM applications
+""".trimIndent()
+
+@Language("sql")
 private val CREATE_APPLICATION_ANSWER_QUERY = """
     INSERT INTO application_answers(application_id, project_id, answers)
     VALUES (?, ?, CAST(? as jsonb))
@@ -71,11 +77,28 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
         }
     }
 
+    override suspend fun listApplications(): List<Application> = withContext(coroutineContext) {
+        sessionOf(dataSource).use { session ->
+            session.list(
+                queryOf(LIST_APPLICATIONS_QUERY)
+            ) { row ->
+                Application(
+                    id = row.int("id"),
+                    name = row.string("name"),
+                    description = row.string("description"),
+                    authorId = row.uuid("author_id"),
+                    items = itemsAdapter.fromJson(row.string("items"))!!.map { it.toApplicationItem() },
+                    conditions = conditionsAdapter.fromJson(row.string("conditions"))!!.toApplicationConditions()
+                )
+            }
+        }
+    }
+
     override suspend fun createApplicationAnswer(
         applicationId: Int,
         projectId: Int,
         answers: List<ApplicationItemAnswer>
-    ) {
+    ): Unit = withContext<Unit>(coroutineContext) {
         val answersJson = answersAdapter.toJson(answers.map { ApplicationItemAnswerJson.fromApplicationItemAnswer(it) })
 
         sessionOf(dataSource).use { session ->
