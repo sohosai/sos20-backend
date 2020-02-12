@@ -13,6 +13,10 @@ class ApplicationController(private val applicationService: ApplicationService) 
         return applicationService.createApplication(input.name, input.description, items, conditions, context.toUser())
     }
 
+    suspend fun listApplicationsForProject(projectId: Int): List<Application> {
+
+    }
+
     suspend fun listApplications(context: AuthContext): List<Application> {
         return applicationService.listApplications(
             caller = context.toUser()

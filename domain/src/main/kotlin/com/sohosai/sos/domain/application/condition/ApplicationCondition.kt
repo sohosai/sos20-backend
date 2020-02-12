@@ -1,3 +1,7 @@
 package com.sohosai.sos.domain.application.condition
 
-interface ApplicationCondition
+import com.sohosai.sos.domain.project.Project
+
+interface ApplicationCondition {
+    fun isMatchForProject(project: Project)
+}

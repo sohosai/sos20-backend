@@ -31,6 +31,14 @@ class ApplicationService(private val applicationRepository: ApplicationRepositor
         )
     }
 
+    suspend fun listApplicationsForProject(projectId: Int, caller: User) {
+        val allApplications = applicationRepository.listApplications()
+
+        allApplications.filter {
+            it.conditions
+        }
+    }
+
     suspend fun listApplications(
         caller: User
     ): List<Application> {
