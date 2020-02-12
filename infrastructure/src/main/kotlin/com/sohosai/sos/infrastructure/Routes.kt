@@ -33,11 +33,29 @@ internal fun Routing.routes() {
                     context = call.principal<AuthStatus>().asContext()
                 ))
             }
-            get("/{id}") {
-                call.respond(userController.getUser(
-                    rawUserId = call.parameters.getOrFail("id"),
-                    context = call.principal<AuthStatus>().asContext()
-                ))
+            route("/{id}") {
+                get("/") {
+                    call.respond(
+                        userController.getUser(
+                            rawUserId = call.parameters.getOrFail("id"),
+                            context = call.principal<AuthStatus>().asContext()
+                        )
+                    )
+                }
+                get("/project") {
+                    call.respond(
+                        userController.getOwningProject(
+                            context = call.principal<AuthStatus>().asContext()
+                        ) ?: ""
+                    )
+                }
+                get("/subown-project") {
+                    call.respond(
+                        userController.getSubOwningProject(
+                            context = call.principal<AuthStatus>().asContext()
+                        ) ?: ""
+                    )
+                }
             }
             get("/login") {
                 call.respond(userController.loginUser(

@@ -12,6 +12,7 @@ import com.sohosai.sos.domain.project.ProjectCategory
 data class ApplicationConditionJson(
     val kind: ApplicationConditionKind,
     val applicationId: Int? = null,
+    val shouldBeSelected: Boolean? = null,
     val itemConditions: ApplicationItemConditions? = null,
     val category: ProjectCategory? = null,
     val attributes: List<ProjectAttribute>? = null
@@ -21,7 +22,8 @@ data class ApplicationConditionJson(
             return when (condition) {
                 is ApplicationConditionAnswered -> ApplicationConditionJson(
                     kind = ApplicationConditionKind.ANSWERED_APPLICATION,
-                    applicationId = condition.applicationId
+                    applicationId = condition.applicationId,
+                    shouldBeSelected = condition.shouldBeSelected
                 )
                 is ApplicationConditionAnsweredItem -> ApplicationConditionJson(
                     kind = ApplicationConditionKind.ANSWERED_APPLICATION_ITEM,
@@ -43,7 +45,8 @@ data class ApplicationConditionJson(
     fun toApplicationCondition(): ApplicationCondition {
         return when (kind) {
             ApplicationConditionKind.ANSWERED_APPLICATION -> ApplicationConditionAnswered(
-                applicationId = requireNotNull(applicationId)
+                applicationId = requireNotNull(applicationId),
+                shouldBeSelected = requireNotNull(shouldBeSelected)
             )
             ApplicationConditionKind.ANSWERED_APPLICATION_ITEM -> ApplicationConditionAnsweredItem(
                 applicationId = requireNotNull(applicationId),
