@@ -1,8 +1,6 @@
-package com.sohosai.sos.interfaces.application
+package com.sohosai.sos.domain.application.json
 
 import com.sohosai.sos.domain.application.Application
-import com.sohosai.sos.domain.application.json.ApplicationConditionsJson
-import com.sohosai.sos.domain.application.json.ApplicationItemJson
 import java.util.*
 
 data class ApplicationJson(
