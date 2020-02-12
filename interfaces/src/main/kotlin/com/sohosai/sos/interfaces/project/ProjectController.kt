@@ -1,6 +1,7 @@
 package com.sohosai.sos.interfaces.project
 
 import com.sohosai.sos.interfaces.AuthContext
+import com.sohosai.sos.interfaces.HttpStatusCodeException
 import com.sohosai.sos.interfaces.toUser
 import com.sohosai.sos.service.ProjectService
 
@@ -18,6 +19,15 @@ class ProjectController(private val projectService: ProjectService) {
             category = input.category,
             attributes = input.attributes
         )
+
+        return ProjectOutput.fromProject(project)
+    }
+
+    suspend fun getProject(rawId: String, context: AuthContext): ProjectOutput {
+        val project = projectService.getProject(
+            id = rawId.toInt(),
+            caller = context.toUser()
+        ) ?: throw HttpStatusCodeException(404, "Project not found.")
 
         return ProjectOutput.fromProject(project)
     }
