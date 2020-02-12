@@ -13,6 +13,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.withContext
+import kotliquery.Row
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import org.intellij.lang.annotations.Language
@@ -33,6 +34,13 @@ private val CREATE_APPLICATION_QUERY = """
     INSERT INTO applications(name, description, author_id, items, conditions)
     VALUES (?, ?, ?, CAST(? AS jsonb), CAST(? AS jsonb))
     RETURNING id
+""".trimIndent()
+
+@Language("sql")
+private val FIND_APPLICATION_BY_ID_QUERY = """
+    SELECT *
+    FROM applications
+    WHERE id = ?
 """.trimIndent()
 
 @Language("sql")
@@ -77,20 +85,21 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
         }
     }
 
+    override suspend fun findApplicationById(
+        id: Int
+    ): Application? = withContext(coroutineContext) {
+        sessionOf(dataSource).use { session ->
+            session.single(
+                queryOf(FIND_APPLICATION_BY_ID_QUERY, id), applicationExtractor
+            )
+        }
+    }
+
     override suspend fun listApplications(): List<Application> = withContext(coroutineContext) {
         sessionOf(dataSource).use { session ->
             session.list(
-                queryOf(LIST_APPLICATIONS_QUERY)
-            ) { row ->
-                Application(
-                    id = row.int("id"),
-                    name = row.string("name"),
-                    description = row.string("description"),
-                    authorId = row.uuid("author_id"),
-                    items = itemsAdapter.fromJson(row.string("items"))!!.map { it.toApplicationItem() },
-                    conditions = conditionsAdapter.fromJson(row.string("conditions"))!!.toApplicationConditions()
-                )
-            }
+                queryOf(LIST_APPLICATIONS_QUERY), applicationExtractor
+            )
         }
     }
 
@@ -109,5 +118,16 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
                 )
             )
         }
+    }
+
+    private val applicationExtractor = { row: Row ->
+        Application(
+            id = row.int("id"),
+            name = row.string("name"),
+            description = row.string("description"),
+            authorId = row.uuid("author_id"),
+            items = itemsAdapter.fromJson(row.string("items"))!!.map { it.toApplicationItem() },
+            conditions = conditionsAdapter.fromJson(row.string("conditions"))!!.toApplicationConditions()
+        )
     }
 }

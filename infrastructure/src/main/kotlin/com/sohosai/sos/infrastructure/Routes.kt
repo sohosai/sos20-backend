@@ -107,6 +107,11 @@ internal fun Routing.routes() {
                 ))
             }
             route("/{id}") {
+                get {
+                    call.respond(applicationController.getApplication(
+                        rawId = call.parameters.getOrFail("id")
+                    ))
+                }
                 post("/answers") {
                     call.respond(HttpStatusCode.Created, applicationController.answerApplication(
                         input = call.receive(),
