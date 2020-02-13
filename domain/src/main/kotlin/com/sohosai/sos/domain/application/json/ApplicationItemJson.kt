@@ -46,7 +46,7 @@ data class ApplicationItemJson(
                     placeHolder = item.placeHolder
                 )
                 is MultipleChoiceApplicationItem -> ApplicationItemJson(
-                    kind = ApplicationItemKind.SINGLE_CHOICE,
+                    kind = ApplicationItemKind.MULTIPLE_CHOICE,
                     id = item.id,
                     name = item.name,
                     description = item.description,
@@ -62,7 +62,7 @@ data class ApplicationItemJson(
                     options = item.options
                 )
                 is LabeledSingleChoiceApplicationItem -> ApplicationItemJson(
-                    kind = ApplicationItemKind.MULTIPLE_CHOICE,
+                    kind = ApplicationItemKind.LABELED_SINGLE_CHOICE,
                     id = item.id,
                     name = item.name,
                     description = item.description,
