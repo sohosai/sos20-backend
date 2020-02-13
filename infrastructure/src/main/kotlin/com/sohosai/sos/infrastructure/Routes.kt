@@ -92,6 +92,16 @@ internal fun Routing.routes() {
                         )
                     )
                 }
+                route("/applications") {
+                    get("/not-answered") {
+                        call.respond(
+                            projectController.getNotAnsweredApplications(
+                                rawProjectId = call.parameters.getOrFail("id"),
+                                context = call.principal<AuthStatus>().asContext()
+                            )
+                        )
+                    }
+                }
             }
         }
         route ("/applications") {
