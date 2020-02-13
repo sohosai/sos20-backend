@@ -6,3 +6,6 @@ out/
 # Gradle
 .gradle/
 build/
+
+# Temp
+docker-compose-prod.yml
