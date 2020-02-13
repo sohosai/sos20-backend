@@ -1,5 +1,7 @@
 package com.sohosai.sos.service
 
+import com.sohosai.sos.domain.application.Application
+import com.sohosai.sos.domain.application.ApplicationRepository
 import com.sohosai.sos.domain.project.*
 import com.sohosai.sos.domain.user.Role
 import com.sohosai.sos.domain.user.User
@@ -9,7 +11,8 @@ import java.util.*
 
 class ProjectService(
     private val projectRepository: ProjectRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val applicationRepository: ApplicationRepository
 ) {
     suspend fun createProject(
         ownerId: UUID,
@@ -46,7 +49,7 @@ class ProjectService(
     suspend fun getProject(id: Int, caller: User): Project? {
         val project = projectRepository.findById(id) ?: return null
 
-        return if (project.ownerId == caller.id || project.subOwnerId == caller.id || caller.hasPrivilege(Role.COMMITTEE)) {
+        return if (project.canAccessBy(caller)) {
             project
         } else {
             null
@@ -63,7 +66,7 @@ class ProjectService(
 
     suspend fun getProjectMembers(projectId: Int, caller: User): ProjectMembers {
         val project = projectRepository.findById(projectId) ?: throw IllegalArgumentException("Project not found. projectId: $projectId")
-        if (project.ownerId != caller.id && project.subOwnerId != caller.id && !caller.hasPrivilege(Role.COMMITTEE)) {
+        if (!project.canAccessBy(caller)) {
             throw IllegalArgumentException("Project not found. projectId: $projectId")
         }
 
@@ -78,5 +81,14 @@ class ProjectService(
             owner = members[0],
             subOwner = members.getOrNull(1)
         )
+    }
+
+    suspend fun getNotAnsweredApplications(projectId: Int, caller: User): List<Application> {
+        val project = projectRepository.findById(projectId) ?: throw IllegalArgumentException("Project not found. projectId: $projectId")
+        if (!project.canAccessBy(caller)) {
+            throw IllegalArgumentException("Project not found. projectId: $projectId")
+        }
+
+        return applicationRepository.listNotAnsweredApplicationByProjectId(projectId)
     }
 }

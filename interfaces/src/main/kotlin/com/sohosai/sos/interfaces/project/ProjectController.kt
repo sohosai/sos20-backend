@@ -1,5 +1,6 @@
 package com.sohosai.sos.interfaces.project
 
+import com.sohosai.sos.domain.application.json.ApplicationJson
 import com.sohosai.sos.interfaces.AuthContext
 import com.sohosai.sos.interfaces.HttpStatusCodeException
 import com.sohosai.sos.interfaces.toUser
@@ -45,5 +46,14 @@ class ProjectController(private val projectService: ProjectService) {
         )
 
         return ProjectMembersOutput.fromProjectMembers(members)
+    }
+
+    suspend fun getNotAnsweredApplications(rawProjectId: String, context: AuthContext): List<ApplicationJson> {
+        val applications = projectService.getNotAnsweredApplications(
+            projectId = rawProjectId.toInt(),
+            caller = context.toUser()
+        )
+
+        return applications.map { ApplicationJson.fromApplication(it) }
     }
 }

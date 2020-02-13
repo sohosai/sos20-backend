@@ -28,4 +28,8 @@ interface ApplicationRepository {
         projectId: Int,
         answers: List<ApplicationItemAnswer>
     )
+
+    suspend fun listNotAnsweredApplicationByProjectId(
+        projectId: Int
+    ): List<Application>
 }

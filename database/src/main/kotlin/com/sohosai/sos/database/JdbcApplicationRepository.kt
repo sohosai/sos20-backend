@@ -56,6 +56,14 @@ private val CREATE_APPLICATION_ANSWER_QUERY = """
     VALUES (?, ?, CAST(? as jsonb))
 """.trimIndent()
 
+@Language("sql")
+private val LIST_NOT_ANSWERED_APPLICATIONS_BY_PROJECT_ID_QUERY = """
+    SELECT applications.*
+    FROM applications
+        LEFT JOIN application_answers answers on applications.id = answers.application_id AND project_id = ?
+    WHERE answers.application_id IS NULL
+""".trimIndent()
+
 class JdbcApplicationRepository(private val dataSource: DataSource) : ApplicationRepository {
     override suspend fun createApplication(
         name: String,
@@ -121,6 +129,20 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
                     CREATE_APPLICATION_ANSWER_QUERY,
                     applicationId, projectId, answersJson
                 )
+            )
+        }
+    }
+
+    override suspend fun listNotAnsweredApplicationByProjectId(
+        projectId: Int
+    ): List<Application> = withContext(coroutineContext) {
+        sessionOf(dataSource).use { session ->
+            session.list(
+                queryOf(
+                    LIST_NOT_ANSWERED_APPLICATIONS_BY_PROJECT_ID_QUERY,
+                    projectId
+                ),
+                applicationExtractor
             )
         }
     }
