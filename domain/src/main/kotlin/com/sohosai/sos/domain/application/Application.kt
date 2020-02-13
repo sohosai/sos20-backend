@@ -2,6 +2,7 @@ package com.sohosai.sos.domain.application
 
 import com.sohosai.sos.domain.application.condition.ApplicationConditions
 import com.sohosai.sos.domain.application.item.ApplicationItem
+import java.time.LocalDate
 import java.util.*
 
 data class Application(
@@ -10,5 +11,7 @@ data class Application(
     val description: String,
     val authorId: UUID,
     val items: List<ApplicationItem>,
-    val conditions: ApplicationConditions
+    val conditions: ApplicationConditions,
+    val startDate: LocalDate,
+    val endDate: LocalDate
 )

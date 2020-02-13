@@ -7,5 +7,7 @@ data class CreateApplicationInput(
     val name: String,
     val description: String,
     val items: List<ApplicationItemJson>,
-    val conditions: ApplicationConditionsJson
+    val conditions: ApplicationConditionsJson,
+    val startDate: String,
+    val endDate: String
 )

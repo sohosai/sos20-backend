@@ -3,6 +3,7 @@ package com.sohosai.sos.domain.application
 import com.sohosai.sos.domain.application.answer.ApplicationItemAnswer
 import com.sohosai.sos.domain.application.condition.ApplicationConditions
 import com.sohosai.sos.domain.application.item.ApplicationItem
+import java.time.LocalDate
 import java.util.*
 
 interface ApplicationRepository {
@@ -11,7 +12,9 @@ interface ApplicationRepository {
         description: String,
         authorId: UUID,
         items: List<ApplicationItem>,
-        conditions: ApplicationConditions
+        conditions: ApplicationConditions,
+        startDate: LocalDate,
+        endDate: LocalDate
     ): Application
 
     suspend fun findApplicationById(

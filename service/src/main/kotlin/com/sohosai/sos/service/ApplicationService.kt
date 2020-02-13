@@ -9,6 +9,7 @@ import com.sohosai.sos.domain.project.ProjectRepository
 import com.sohosai.sos.domain.user.Role
 import com.sohosai.sos.domain.user.User
 import com.sohosai.sos.service.exception.NotEnoughPermissionException
+import java.time.LocalDate
 
 class ApplicationService(private val applicationRepository: ApplicationRepository, private val projectRepository: ProjectRepository) {
     suspend fun createApplication(
@@ -16,6 +17,8 @@ class ApplicationService(private val applicationRepository: ApplicationRepositor
         description: String,
         items: List<ApplicationItem>,
         conditions: ApplicationConditions,
+        startDate: LocalDate,
+        endDate: LocalDate,
         author: User
     ): Application {
         if (!author.hasPrivilege(Role.COMMITTEE)) {
@@ -27,7 +30,9 @@ class ApplicationService(private val applicationRepository: ApplicationRepositor
             description = description,
             authorId = author.id,
             items = items,
-            conditions = conditions
+            conditions = conditions,
+            startDate = startDate,
+            endDate = endDate
         )
     }
 

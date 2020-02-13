@@ -6,13 +6,23 @@ import com.sohosai.sos.interfaces.AuthContext
 import com.sohosai.sos.interfaces.HttpStatusCodeException
 import com.sohosai.sos.interfaces.toUser
 import com.sohosai.sos.service.ApplicationService
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class ApplicationController(private val applicationService: ApplicationService) {
     suspend fun createApplication(input: CreateApplicationInput, context: AuthContext): ApplicationJson {
         val items = input.items.map { it.toApplicationItem() }
         val conditions = input.conditions.toApplicationConditions()
 
-        val application = applicationService.createApplication(input.name, input.description, items, conditions, context.toUser())
+        val application = applicationService.createApplication(
+            name = input.name,
+            description = input.description,
+            items = items,
+            conditions = conditions,
+            startDate = LocalDate.parse(input.startDate, DateTimeFormatter.ISO_DATE),
+            endDate = LocalDate.parse(input.endDate, DateTimeFormatter.ISO_DATE),
+            author = context.toUser()
+        )
 
         return ApplicationJson.fromApplication(application)
     }

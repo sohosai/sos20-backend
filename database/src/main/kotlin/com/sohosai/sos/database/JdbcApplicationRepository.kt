@@ -17,6 +17,7 @@ import kotliquery.Row
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import org.intellij.lang.annotations.Language
+import java.time.LocalDate
 import java.util.*
 import javax.sql.DataSource
 import kotlin.coroutines.coroutineContext
@@ -31,8 +32,8 @@ private val answersAdapter: JsonAdapter<List<ApplicationItemAnswerJson>> = moshi
 
 @Language("sql")
 private val CREATE_APPLICATION_QUERY = """
-    INSERT INTO applications(name, description, author_id, items, conditions)
-    VALUES (?, ?, ?, CAST(? AS jsonb), CAST(? AS jsonb))
+    INSERT INTO applications(name, description, author_id, items, conditions, start_date, end_date)
+    VALUES (?, ?, ?, CAST(? AS jsonb), CAST(? AS jsonb), ?, ?)
     RETURNING id
 """.trimIndent()
 
@@ -61,7 +62,9 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
         description: String,
         authorId: UUID,
         items: List<ApplicationItem>,
-        conditions: ApplicationConditions
+        conditions: ApplicationConditions,
+        startDate: LocalDate,
+        endDate: LocalDate
     ): Application = withContext(coroutineContext) {
         val itemsJson = itemsAdapter.toJson(items.map { ApplicationItemJson.fromApplicationItem(it) })
         val conditionsJson = conditionsAdapter.toJson(ApplicationConditionsJson.fromApplicationConditions(conditions))
@@ -70,7 +73,7 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
             session.single(
                 queryOf(
                     CREATE_APPLICATION_QUERY,
-                    name, description, authorId, itemsJson, conditionsJson
+                    name, description, authorId, itemsJson, conditionsJson, startDate, endDate
                 )
             ) { row ->
                 Application(
@@ -79,7 +82,9 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
                     description = description,
                     authorId = authorId,
                     items = items,
-                    conditions = conditions
+                    conditions = conditions,
+                    startDate = startDate,
+                    endDate = endDate
                 )
             }!!
         }
@@ -127,7 +132,9 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
             description = row.string("description"),
             authorId = row.uuid("author_id"),
             items = itemsAdapter.fromJson(row.string("items"))!!.map { it.toApplicationItem() },
-            conditions = conditionsAdapter.fromJson(row.string("conditions"))!!.toApplicationConditions()
+            conditions = conditionsAdapter.fromJson(row.string("conditions"))!!.toApplicationConditions(),
+            startDate = row.localDate("start_date"),
+            endDate = row.localDate("end_date")
         )
     }
 }
