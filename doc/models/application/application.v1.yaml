@@ -15,6 +15,14 @@ properties:
       $ref: ./item/applicationitem.v1.yaml
   conditions:
     $ref: ./condition/applicationcondition.v1.yaml
+  startDate:
+    type: string
+    format: date
+    example: '2020-02-14'
+  endDate:
+    type: string
+    format: date
+    example: '2020-02-14'
 required:
   - id
   - name
@@ -22,3 +30,5 @@ required:
   - authorId
   - items
   - conditions
+  - startDate
+  - endDate

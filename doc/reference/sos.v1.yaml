@@ -208,11 +208,22 @@ paths:
                     $ref: ../models/application/item/applicationitem.v1.yaml
                 conditions:
                   $ref: ../models/application/condition/applicationconditions.v1.yaml
+                startDate:
+                  type: string
+                  default: '2020-02-14'
+                  format: date
+                endDate:
+                  type: string
+                  default: '2020-02-14'
+                  format: date
               required:
                 - name
                 - description
                 - items
                 - conditions
+                - startDate
+                - endDate
+        description: ''
       tags:
         - application
     get:
