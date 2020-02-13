@@ -5,6 +5,7 @@ import com.sohosai.sos.domain.application.condition.conditions.ApplicationCondit
 import com.sohosai.sos.domain.application.condition.conditions.ApplicationConditionAnsweredItem
 import com.sohosai.sos.domain.application.condition.conditions.ApplicationConditionAttributes
 import com.sohosai.sos.domain.application.condition.conditions.ApplicationConditionCategory
+import com.sohosai.sos.domain.application.item.ApplicationItemCondition
 import com.sohosai.sos.domain.application.item.ApplicationItemConditions
 import com.sohosai.sos.domain.project.ProjectAttribute
 import com.sohosai.sos.domain.project.ProjectCategory
@@ -13,7 +14,7 @@ data class ApplicationConditionJson(
     val kind: ApplicationConditionKind,
     val applicationId: Int? = null,
     val shouldBeSelected: Boolean? = null,
-    val itemConditions: ApplicationItemConditions? = null,
+    val itemCondition: ApplicationItemCondition? = null,
     val category: ProjectCategory? = null,
     val attributes: List<ProjectAttribute>? = null
 ) {
@@ -28,7 +29,7 @@ data class ApplicationConditionJson(
                 is ApplicationConditionAnsweredItem -> ApplicationConditionJson(
                     kind = ApplicationConditionKind.ANSWERED_APPLICATION_ITEM,
                     applicationId = condition.applicationId,
-                    itemConditions = condition.itemConditions
+                    itemCondition = condition.itemCondition
                 )
                 is ApplicationConditionCategory -> ApplicationConditionJson(
                     kind = ApplicationConditionKind.PROJECT_CATEGORY,
@@ -50,7 +51,7 @@ data class ApplicationConditionJson(
             )
             ApplicationConditionKind.ANSWERED_APPLICATION_ITEM -> ApplicationConditionAnsweredItem(
                 applicationId = requireNotNull(applicationId),
-                itemConditions = requireNotNull(itemConditions)
+                itemCondition = requireNotNull(itemCondition)
             )
             ApplicationConditionKind.PROJECT_CATEGORY -> ApplicationConditionCategory(
                 category = requireNotNull(category)
