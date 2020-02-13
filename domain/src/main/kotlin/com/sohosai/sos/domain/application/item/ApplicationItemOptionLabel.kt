@@ -1,4 +1,6 @@
 package com.sohosai.sos.domain.application.item
 
-class ApplicationItemOptionLabel {
-}
+data class ApplicationItemOptionLabel(
+    val labelId: Int,
+    val name: String
+)
