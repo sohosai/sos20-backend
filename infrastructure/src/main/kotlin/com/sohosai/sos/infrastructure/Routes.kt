@@ -43,18 +43,18 @@ internal fun Routing.routes() {
                     )
                 }
                 get("/project") {
-                    call.respond(
-                        userController.getOwningProject(
-                            context = call.principal<AuthStatus>().asContext()
-                        ) ?: ""
-                    )
+                    userController.getOwningProject(
+                        context = call.principal<AuthStatus>().asContext()
+                    )?.let {
+                        call.respond(it)
+                    } ?: call.respond(HttpStatusCode.NoContent)
                 }
                 get("/subown-project") {
-                    call.respond(
-                        userController.getSubOwningProject(
-                            context = call.principal<AuthStatus>().asContext()
-                        ) ?: ""
-                    )
+                    userController.getSubOwningProject(
+                        context = call.principal<AuthStatus>().asContext()
+                    )?.let {
+                        call.respond(it)
+                    } ?: call.respond(HttpStatusCode.NoContent)
                 }
             }
             get("/login") {
