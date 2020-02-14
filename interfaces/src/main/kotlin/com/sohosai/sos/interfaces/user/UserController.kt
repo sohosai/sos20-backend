@@ -18,7 +18,7 @@ class UserController(private val userService: UserService) {
             studentId = input.studentId,
             affiliationName = input.affiliationName,
             affiliationType = input.affiliationType,
-            role = Role.GENERAL,
+            role = Role.COMMITTEE,
             authId = context.authId
         )
 
