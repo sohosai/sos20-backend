@@ -122,6 +122,12 @@ internal fun Routing.routes() {
                         rawId = call.parameters.getOrFail("id")
                     ))
                 }
+                get("/answers") {
+                    call.respond(applicationController.listAnswers(
+                        rawApplicationId = call.parameters.getOrFail(("id")),
+                        context = call.principal<AuthStatus>().asContext()
+                    ))
+                }
                 post("/answers") {
                     call.respond(HttpStatusCode.Created, applicationController.answerApplication(
                         input = call.receive(),

@@ -27,7 +27,7 @@ data class ApplicationItemAnswerJson(
                     value = answer.value
                 )
                 is ApplicationItemAnswerMultipleChoice -> ApplicationItemAnswerJson(
-                    kind = ApplicationItemKind.SINGLE_CHOICE,
+                    kind = ApplicationItemKind.MULTIPLE_CHOICE,
                     itemId = answer.itemId,
                     selectedOptionIds = answer.selectedOptionIds
                 )
@@ -37,7 +37,7 @@ data class ApplicationItemAnswerJson(
                     selectedOptionId = answer.selectedOptionId
                 )
                 is ApplicationItemAnswerLabeledSingleChoice -> ApplicationItemAnswerJson(
-                    kind = ApplicationItemKind.MULTIPLE_CHOICE,
+                    kind = ApplicationItemKind.LABELED_SINGLE_CHOICE,
                     itemId = answer.itemId,
                     selectedOptionMap = answer.selectedOptionMap
                 )

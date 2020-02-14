@@ -1,6 +1,7 @@
 package com.sohosai.sos.domain.application
 
 import com.sohosai.sos.domain.application.answer.ApplicationItemAnswer
+import com.sohosai.sos.domain.application.answer.ProjectsApplicationAnswer
 import com.sohosai.sos.domain.application.condition.ApplicationConditions
 import com.sohosai.sos.domain.application.item.ApplicationItem
 import java.time.LocalDate
@@ -32,4 +33,8 @@ interface ApplicationRepository {
     suspend fun listNotAnsweredApplicationByProjectId(
         projectId: Int
     ): List<Application>
+
+    suspend fun listAnswers(
+        applicationId: Int
+    ): List<ProjectsApplicationAnswer>
 }

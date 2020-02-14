@@ -1,6 +1,7 @@
 package com.sohosai.sos.interfaces.application
 
 import com.sohosai.sos.domain.application.Application
+import com.sohosai.sos.domain.application.answer.ProjectsApplicationAnswer
 import com.sohosai.sos.domain.application.json.ApplicationJson
 import com.sohosai.sos.interfaces.AuthContext
 import com.sohosai.sos.interfaces.HttpStatusCodeException
@@ -50,6 +51,13 @@ class ApplicationController(private val applicationService: ApplicationService) 
             applicationId = rawApplicationId.toInt(),
             projectId = input.projectId,
             answers = answers,
+            caller = context.toUser()
+        )
+    }
+
+    suspend fun listAnswers(rawApplicationId: String, context: AuthContext): List<ProjectsApplicationAnswer> {
+        return applicationService.getApplicationAnswer(
+            applicationId = rawApplicationId.toInt(),
             caller = context.toUser()
         )
     }
