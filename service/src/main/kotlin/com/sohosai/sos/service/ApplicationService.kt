@@ -3,6 +3,7 @@ package com.sohosai.sos.service
 import com.sohosai.sos.domain.application.Application
 import com.sohosai.sos.domain.application.ApplicationRepository
 import com.sohosai.sos.domain.application.answer.ApplicationItemAnswer
+import com.sohosai.sos.domain.application.answer.ProjectsApplicationAnswer
 import com.sohosai.sos.domain.application.condition.ApplicationConditions
 import com.sohosai.sos.domain.application.item.ApplicationItem
 import com.sohosai.sos.domain.project.ProjectRepository
@@ -68,5 +69,16 @@ class ApplicationService(private val applicationRepository: ApplicationRepositor
             projectId = projectId,
             answers = answers
         )
+    }
+
+    suspend fun getApplicationAnswer(
+        applicationId: Int,
+        caller: User
+    ): List<ProjectsApplicationAnswer> {
+        if (!caller.hasPrivilege(Role.COMMITTEE)) {
+            throw NotEnoughPermissionException()
+        }
+
+        return applicationRepository.listAnswers(applicationId)
     }
 }

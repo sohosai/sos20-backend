@@ -3,11 +3,15 @@ package com.sohosai.sos.database
 import com.sohosai.sos.domain.application.Application
 import com.sohosai.sos.domain.application.ApplicationRepository
 import com.sohosai.sos.domain.application.answer.ApplicationItemAnswer
+import com.sohosai.sos.domain.application.answer.ProjectsApplicationAnswer
 import com.sohosai.sos.domain.application.condition.ApplicationConditions
 import com.sohosai.sos.domain.application.item.ApplicationItem
 import com.sohosai.sos.domain.application.json.ApplicationConditionsJson
 import com.sohosai.sos.domain.application.json.ApplicationItemAnswerJson
 import com.sohosai.sos.domain.application.json.ApplicationItemJson
+import com.sohosai.sos.domain.project.Project
+import com.sohosai.sos.domain.project.ProjectAttribute
+import com.sohosai.sos.domain.project.ProjectCategory
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -62,6 +66,14 @@ private val LIST_NOT_ANSWERED_APPLICATIONS_BY_PROJECT_ID_QUERY = """
     FROM applications
         LEFT JOIN application_answers answers on applications.id = answers.application_id AND project_id = ?
     WHERE answers.application_id IS NULL
+""".trimIndent()
+
+@Language("sql")
+private val LIST_ANSWERS_QUERY = """
+    SELECT application_answers.*, p.*
+    FROM application_answers
+        LEFT JOIN projects AS p on application_answers.project_id = p.id
+    WHERE application_id = ?
 """.trimIndent()
 
 class JdbcApplicationRepository(private val dataSource: DataSource) : ApplicationRepository {
@@ -144,6 +156,30 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
                 ),
                 applicationExtractor
             )
+        }
+    }
+
+    override suspend fun listAnswers(
+        applicationId: Int
+    ): List<ProjectsApplicationAnswer> = withContext(coroutineContext) {
+        sessionOf(dataSource).use { session ->
+            session.list(queryOf(LIST_ANSWERS_QUERY, applicationId)) { row ->
+                ProjectsApplicationAnswer(
+                    project = Project(
+                        id = row.int("id"),
+                        ownerId = row.uuid("owner_id"),
+                        subOwnerId = row.uuidOrNull("sub_owner_id"),
+                        name = row.string("name"),
+                        kanaName = row.string("kana_name"),
+                        groupName = row.string("group_name"),
+                        kanaGroupName = row.string("kana_group_name"),
+                        description = row.string("description"),
+                        category = ProjectCategory.valueOf(row.string("category")),
+                        attributes = row.array<String>("attributes").map { ProjectAttribute.valueOf(it) }
+                    ),
+                    answers = answersAdapter.fromJson(row.string("answers"))!!
+                )
+            }
         }
     }
 
