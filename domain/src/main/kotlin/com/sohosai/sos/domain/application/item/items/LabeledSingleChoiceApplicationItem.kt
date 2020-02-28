@@ -10,6 +10,7 @@ data class LabeledSingleChoiceApplicationItem(
     override val name: String,
     override val description: String,
     override val conditions: ApplicationItemConditions?,
+    override val isRequired: Boolean,
     val labels: List<ApplicationItemOptionLabel>,
     val options: List<ApplicationItemOption>
 ) : ApplicationItem

@@ -8,6 +8,7 @@ data class NumberApplicationItem(
     override val name: String,
     override val description: String,
     override val conditions: ApplicationItemConditions?,
+    override val isRequired: Boolean,
     val min: Int,
     val max: Int,
     val placeHolder: String?

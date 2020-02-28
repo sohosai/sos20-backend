@@ -8,6 +8,7 @@ data class FileApplicationItem(
     override val name: String,
     override val description: String,
     override val conditions: ApplicationItemConditions?,
+    override val isRequired: Boolean,
     val allowedTypes: List<String>,
     val isMultipleAllowed: Boolean
 ) : ApplicationItem
