@@ -8,6 +8,7 @@ import io.ktor.auth.authenticate
 import io.ktor.auth.principal
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
+import io.ktor.request.receiveText
 import io.ktor.response.respond
 import io.ktor.routing.Routing
 import io.ktor.routing.get
@@ -55,6 +56,13 @@ internal fun Routing.routes() {
                     )?.let {
                         call.respond(it)
                     } ?: call.respond(HttpStatusCode.NoContent)
+                }
+                post("/role") {
+                    call.respond(userController.updateUserRole(
+                        rawUserId = call.parameters.getOrFail("id"),
+                        rawRole = call.receiveText(),
+                        context = call.principal<AuthStatus>().asContext()
+                    ))
                 }
             }
             get("/login") {
