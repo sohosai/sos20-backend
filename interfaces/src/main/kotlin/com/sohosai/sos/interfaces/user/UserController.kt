@@ -55,4 +55,12 @@ class UserController(private val userService: UserService) {
             ProjectOutput.fromProject(it)
         }
     }
+
+    suspend fun updateUserRole(rawUserId: String, rawRole: String, context: AuthContext) {
+        userService.updateUserRole(
+            caller = context.toUser(),
+            userId = UUID.fromString(rawUserId),
+            role = Role.valueOf(rawRole)
+        )
+    }
 }

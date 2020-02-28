@@ -44,6 +44,13 @@ private val FIND_USER_BY_AUTH_ID_QUERY = """
     WHERE auth_id = ?
 """.trimIndent()
 
+@Language("sql")
+private val UPDATE_USER_ROLE_QUERY = """
+    UPDATE users
+    SET role = CAST(? AS user_role)
+    WHERE id = ?
+""".trimIndent()
+
 class JdbcUserRepository(private val dataSource: DataSource) :
     UserRepository {
 
@@ -101,6 +108,12 @@ class JdbcUserRepository(private val dataSource: DataSource) :
     override suspend fun findUserByAuthId(authId: String): User? = withContext(coroutineContext) {
         sessionOf(dataSource).use { session ->
             session.single(queryOf(FIND_USER_BY_AUTH_ID_QUERY, authId), userExtractor)
+        }
+    }
+
+    override suspend fun updateUserRole(userId: UUID, role: Role) = withContext<Unit>(coroutineContext) {
+        sessionOf(dataSource).use { session ->
+            session.execute(queryOf(UPDATE_USER_ROLE_QUERY, role.name, userId))
         }
     }
 

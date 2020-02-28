@@ -58,4 +58,12 @@ class UserService(private val userRepository: UserRepository, private val projec
     suspend fun findSubOwningProject(caller: User): Project? {
         return projectRepository.findProjectBySubOwner(caller.id)
     }
+
+    suspend fun updateUserRole(caller: User, userId: UUID, role: Role) {
+        if (!caller.hasPrivilege(Role.ADMIN) || userRepository.findUserById(userId) == null) {
+            throw UserNotFoundException()
+        }
+
+        userRepository.updateUserRole(userId, role)
+    }
 }
