@@ -9,5 +9,6 @@ data class SingleChoiceApplicationItem(
     override val name: String,
     override val description: String,
     override val conditions: ApplicationItemConditions?,
+    override val isRequired: Boolean,
     val options: List<ApplicationItemOption>
 ) : ApplicationItem

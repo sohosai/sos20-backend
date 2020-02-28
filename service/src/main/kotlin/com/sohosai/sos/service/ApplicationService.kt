@@ -64,6 +64,16 @@ class ApplicationService(private val applicationRepository: ApplicationRepositor
             throw NotEnoughPermissionException()
         }
 
+        val application = applicationRepository.findApplicationById(applicationId)
+        requireNotNull(application) { "Application with id $applicationId is not found." }
+
+        // throw error when required item is not answered
+        application.items.filter { it.isRequired }.forEach { item ->
+            if (answers.none { it.itemId == item.id }) {
+                throw IllegalArgumentException("No answer found for required application item with id ${item.id}")
+            }
+        }
+
         applicationRepository.createApplicationAnswer(
             applicationId = applicationId,
             projectId = projectId,

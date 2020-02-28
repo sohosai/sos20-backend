@@ -12,6 +12,7 @@ data class ApplicationItemJson(
     val name: String,
     val description: String,
     val conditions: ApplicationItemConditions?,
+    val isRequired: Boolean,
     val minLength: Int? = null,
     val maxLength: Int? = null,
     val placeHolder: String? = null,
@@ -31,6 +32,7 @@ data class ApplicationItemJson(
                     name = item.name,
                     description = item.description,
                     conditions = item.conditions,
+                    isRequired = item.isRequired,
                     minLength = item.minLength,
                     maxLength = item.maxLength,
                     placeHolder = item.placeHolder
@@ -41,6 +43,7 @@ data class ApplicationItemJson(
                     name = item.name,
                     description = item.description,
                     conditions = item.conditions,
+                    isRequired = item.isRequired,
                     min = item.min,
                     max = item.max,
                     placeHolder = item.placeHolder
@@ -51,6 +54,7 @@ data class ApplicationItemJson(
                     name = item.name,
                     description = item.description,
                     conditions = item.conditions,
+                    isRequired = item.isRequired,
                     options = item.options
                 )
                 is SingleChoiceApplicationItem -> ApplicationItemJson(
@@ -59,6 +63,7 @@ data class ApplicationItemJson(
                     name = item.name,
                     description = item.description,
                     conditions = item.conditions,
+                    isRequired = item.isRequired,
                     options = item.options
                 )
                 is LabeledSingleChoiceApplicationItem -> ApplicationItemJson(
@@ -67,6 +72,7 @@ data class ApplicationItemJson(
                     name = item.name,
                     description = item.description,
                     conditions = item.conditions,
+                    isRequired = item.isRequired,
                     labels = item.labels,
                     options = item.options
                 )
@@ -76,6 +82,7 @@ data class ApplicationItemJson(
                     name = item.name,
                     description = item.description,
                     conditions = item.conditions,
+                    isRequired = item.isRequired,
                     allowedTypes = item.allowedTypes,
                     isMultipleAllowed = item.isMultipleAllowed
                 )
@@ -90,6 +97,7 @@ data class ApplicationItemJson(
                 name = name,
                 description = description,
                 conditions = conditions,
+                isRequired = isRequired,
                 minLength = requireNotNull(minLength),
                 maxLength = requireNotNull(maxLength),
                 placeHolder = placeHolder
@@ -99,6 +107,7 @@ data class ApplicationItemJson(
                 name = name,
                 description = description,
                 conditions = conditions,
+                isRequired = isRequired,
                 min = requireNotNull(min),
                 max = requireNotNull(max),
                 placeHolder = placeHolder
@@ -108,6 +117,7 @@ data class ApplicationItemJson(
                 name = name,
                 description = description,
                 conditions = conditions,
+                isRequired = isRequired,
                 options = requireNotNull(options)
             )
             ApplicationItemKind.SINGLE_CHOICE -> SingleChoiceApplicationItem(
@@ -115,6 +125,7 @@ data class ApplicationItemJson(
                 name = name,
                 description = description,
                 conditions = conditions,
+                isRequired = isRequired,
                 options = requireNotNull(options)
             )
             ApplicationItemKind.LABELED_SINGLE_CHOICE -> LabeledSingleChoiceApplicationItem(
@@ -122,6 +133,7 @@ data class ApplicationItemJson(
                 name = name,
                 description = description,
                 conditions = conditions,
+                isRequired = isRequired,
                 labels = requireNotNull(labels),
                 options = requireNotNull(options)
             )
@@ -130,6 +142,7 @@ data class ApplicationItemJson(
                 name = name,
                 description = description,
                 conditions = conditions,
+                isRequired = isRequired,
                 allowedTypes = requireNotNull(allowedTypes),
                 isMultipleAllowed = requireNotNull(isMultipleAllowed)
             )

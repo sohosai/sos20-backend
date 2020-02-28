@@ -5,4 +5,5 @@ interface ApplicationItem {
     val name: String
     val description: String
     val conditions: ApplicationItemConditions?
+    val isRequired: Boolean
 }
