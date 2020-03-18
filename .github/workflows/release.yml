@@ -71,4 +71,4 @@ jobs:
       TF_VAR_SAKURA_REG_USERNAME: "actions"
       TF_VAR_SAKURA_REG_PASSWORD: ${{ secrets.SAKURA_REG_PASSWORD }}
       TF_VAR_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-      TF_VAR_GIT_HASH: ${GITHUB_SHA}
+      TF_VAR_GIT_HASH: ${{ github.sha }}
