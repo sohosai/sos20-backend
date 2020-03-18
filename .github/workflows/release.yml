@@ -22,7 +22,7 @@ jobs:
         run: docker login sohosai.sakuracr.jp -u ${{ secrets.SAKURA_REG_USERNAME }} -p ${{ secrets.SAKURA_REG_PASSWORD }}
 
       - name: Build image
-        run: docker build -t ${{ secrets.SAKURA_REG_NAME }}/${IMAGE_NAME}:${GITHUB_SHA} --file Dockerfile .
+        run: docker build -t sohosai.sakuracr.jp/${IMAGE_NAME}:${GITHUB_SHA} --file Dockerfile .
 
       - name: Push image
         run: docker push ${{ secrets.SAKURA_REG_NAME }}/${IMAGE_NAME}:${GITHUB_SHA}
