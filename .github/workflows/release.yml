@@ -38,6 +38,11 @@ jobs:
           ref: "master"
           token: ${{ secrets.GITHUB_PAT }}
 
+      - name: "Setup Terraform Provider for SakuraCloud"
+        run: |
+          wget terraform-provider-sakuracloud_2.2.0_linux-amd64.zip
+          unzip terraform-provider-sakuracloud_2.2.0_linux-amd64.zip
+
       - name: "Terraform Init"
         uses: hashicorp/terraform-github-actions@master
         with:
