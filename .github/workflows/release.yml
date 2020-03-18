@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Login to Sakura Container Registry
-        run: docker login ${{ secrets.SAKURA_REG_NAME }} -u ${{ secrets.SAKURA_REG_USERNAME }} -p ${{ secrets.SAKURA_REG_PASSWORD }}
+        run: docker login sohosai.sakuracr.jp -u ${{ secrets.SAKURA_REG_USERNAME }} -p ${{ secrets.SAKURA_REG_PASSWORD }}
 
       - name: Build image
         run: docker build -t ${{ secrets.SAKURA_REG_NAME }}/${IMAGE_NAME}:${GITHUB_SHA} --file Dockerfile .
