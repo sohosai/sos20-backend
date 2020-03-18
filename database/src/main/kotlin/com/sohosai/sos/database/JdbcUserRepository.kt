@@ -12,8 +12,8 @@ import kotlin.coroutines.coroutineContext
 
 @Language("sql")
 private val CREATE_USER_QUERY = """
-    INSERT INTO users(name, kana_name, email, phone_number, student_id, affiliation_name, affiliation_type, role, auth_id)
-    VALUES (?, ?, ?, ?, ?, ?, CAST(? AS affiliation_type), CAST(? AS user_role), ?)
+    INSERT INTO users(id, name, kana_name, email, phone_number, student_id, affiliation_name, affiliation_type, role, auth_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, CAST(? AS affiliation_type), CAST(? AS user_role), ?)
     RETURNING id
 """.trimIndent()
 
@@ -69,7 +69,7 @@ class JdbcUserRepository(private val dataSource: DataSource) :
             session.single(
                 queryOf(
                     CREATE_USER_QUERY,
-                    name, kanaName, email.value, phoneNumber.value, studentId, affiliationName, affiliationType.name, role.name, authId
+                    UUID.randomUUID(), name, kanaName, email.value, phoneNumber.value, studentId, affiliationName, affiliationType.name, role.name, authId
                 )
             ) {
                 User(
