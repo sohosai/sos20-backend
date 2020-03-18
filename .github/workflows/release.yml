@@ -36,7 +36,7 @@ jobs:
         with:
           repository: "sohosai/sos20-infra"
           ref: "master"
-          token: ${GITHUB_PAT}
+          token: ${{ secrets.GITHUB_PAT }}
 
       - name: "Terraform Plan"
         uses: hashicorp/terraform-github-actions@master
@@ -52,7 +52,6 @@ jobs:
           tf_actions_subcommand: "apply"
           tf_actions_comment: false
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
       TF_VERSION: "latest"
       TF_VAR_SAKURA_TOKEN: ${{ secrets.SAKURA_TOKEN }}
       TF_VAR_SAKURA_SECRET: ${{ secrets.SAKURA_SECRET }}
