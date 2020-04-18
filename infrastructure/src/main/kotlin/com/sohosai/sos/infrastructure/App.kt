@@ -53,6 +53,7 @@ fun Application.configure() {
                 .build()
             realm = env.config.property("jwt.realm").getString()
             // TODO: verify audience (client id)
+            log.info(env.config.property("jwt.issuer").getString())
             verifier(jwkProvider, env.config.property("jwt.issuer").getString()) {
                 withAudience(env.config.property("jwt.aud").getString())
             }
