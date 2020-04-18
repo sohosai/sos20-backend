@@ -24,6 +24,7 @@ import io.ktor.server.netty.EngineMain
 import org.flywaydb.core.Flyway
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
+import java.net.URL
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
@@ -46,13 +47,15 @@ fun Application.configure() {
     }
     install(Authentication) {
         jwt {
-            val jwkProvider: JwkProvider = JwkProviderBuilder(env.config.property("jwt.jwkDomain").getString())
+            val jwkProvider: JwkProvider = JwkProviderBuilder(URL(env.config.property("jwt.jwkDomain").getString()))
                 .cached(10, 24, TimeUnit.HOURS)
                 .rateLimited(10, 1, TimeUnit.MINUTES)
                 .build()
             realm = env.config.property("jwt.realm").getString()
             // TODO: verify audience (client id)
-            verifier(jwkProvider, env.config.property("jwt.issuer").getString())
+            verifier(jwkProvider, env.config.property("jwt.issuer").getString()) {
+                withAudience(env.config.property("jwt.aud").getString())
+            }
             validate { credential ->
                 credential.payload.getClaim("email")?.asString()?.let {
                     AuthStatus.Authorized(
