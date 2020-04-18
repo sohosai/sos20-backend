@@ -11,7 +11,7 @@ data class Application(
     val description: String,
     val authorId: UUID,
     val items: List<ApplicationItem>,
-    val conditions: ApplicationConditions,
+    val conditions: ApplicationConditions?,
     val startDate: LocalDate,
     val endDate: LocalDate
 )
