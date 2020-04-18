@@ -17,7 +17,7 @@ class ApplicationService(private val applicationRepository: ApplicationRepositor
         name: String,
         description: String,
         items: List<ApplicationItem>,
-        conditions: ApplicationConditions,
+        conditions: ApplicationConditions?,
         startDate: LocalDate,
         endDate: LocalDate,
         author: User

@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter
 class ApplicationController(private val applicationService: ApplicationService) {
     suspend fun createApplication(input: CreateApplicationInput, context: AuthContext): ApplicationJson {
         val items = input.items.map { it.toApplicationItem() }
-        val conditions = input.conditions.toApplicationConditions()
+        val conditions = input.conditions?.toApplicationConditions()
 
         val application = applicationService.createApplication(
             name = input.name,

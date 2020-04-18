@@ -13,7 +13,7 @@ interface ApplicationRepository {
         description: String,
         authorId: UUID,
         items: List<ApplicationItem>,
-        conditions: ApplicationConditions,
+        conditions: ApplicationConditions?,
         startDate: LocalDate,
         endDate: LocalDate
     ): Application

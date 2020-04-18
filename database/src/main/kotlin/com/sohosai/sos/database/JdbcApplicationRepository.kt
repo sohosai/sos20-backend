@@ -82,12 +82,14 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
         description: String,
         authorId: UUID,
         items: List<ApplicationItem>,
-        conditions: ApplicationConditions,
+        conditions: ApplicationConditions?,
         startDate: LocalDate,
         endDate: LocalDate
     ): Application = withContext(coroutineContext) {
         val itemsJson = itemsAdapter.toJson(items.map { ApplicationItemJson.fromApplicationItem(it) })
-        val conditionsJson = conditionsAdapter.toJson(ApplicationConditionsJson.fromApplicationConditions(conditions))
+        val conditionsJson = conditions?.let {
+            conditionsAdapter.toJson(ApplicationConditionsJson.fromApplicationConditions(it))
+        }
 
         sessionOf(dataSource).use { session ->
             session.single(
@@ -190,7 +192,9 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
             description = row.string("description"),
             authorId = row.uuid("author_id"),
             items = itemsAdapter.fromJson(row.string("items"))!!.map { it.toApplicationItem() },
-            conditions = conditionsAdapter.fromJson(row.string("conditions"))!!.toApplicationConditions(),
+            conditions = row.stringOrNull("conditions")?.let {
+                conditionsAdapter.fromJson(it)!!.toApplicationConditions()
+            },
             startDate = row.localDate("start_date"),
             endDate = row.localDate("end_date")
         )

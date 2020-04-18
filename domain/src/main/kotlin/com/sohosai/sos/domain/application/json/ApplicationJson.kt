@@ -14,7 +14,7 @@ data class ApplicationJson(
     val description: String,
     val authorId: UUID,
     val items: List<ApplicationItemJson>,
-    val conditions: ApplicationConditionsJson,
+    val conditions: ApplicationConditionsJson?,
     val startDate: String,
     val endDate: String
 ) {
@@ -26,7 +26,7 @@ data class ApplicationJson(
                 description = application.description,
                 authorId = application.authorId,
                 items = application.items.map { ApplicationItemJson.fromApplicationItem(it) },
-                conditions = ApplicationConditionsJson.fromApplicationConditions(application.conditions),
+                conditions = application.conditions?.let { ApplicationConditionsJson.fromApplicationConditions(it) },
                 startDate = application.startDate.format(dateFormatter),
                 endDate = application.endDate.format(dateFormatter)
             )
