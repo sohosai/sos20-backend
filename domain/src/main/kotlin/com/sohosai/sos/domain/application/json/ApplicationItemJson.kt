@@ -11,13 +11,14 @@ data class ApplicationItemJson(
     val id: Int,
     val name: String,
     val description: String,
-    val conditions: ApplicationItemConditions?,
+    val conditions: ApplicationItemConditions? = null,
     val isRequired: Boolean,
     val minLength: Int? = null,
     val maxLength: Int? = null,
     val placeHolder: String? = null,
     val min: Int? = null,
     val max: Int? = null,
+    val unit: String? = null,
     val options: List<ApplicationItemOption>? = null,
     val labels: List<ApplicationItemOptionLabel>? = null,
     val allowedTypes: List<String>? = null,
@@ -46,7 +47,8 @@ data class ApplicationItemJson(
                     isRequired = item.isRequired,
                     min = item.min,
                     max = item.max,
-                    placeHolder = item.placeHolder
+                    placeHolder = item.placeHolder,
+                    unit = item.unit
                 )
                 is MultipleChoiceApplicationItem -> ApplicationItemJson(
                     kind = ApplicationItemKind.MULTIPLE_CHOICE,
@@ -110,7 +112,8 @@ data class ApplicationItemJson(
                 isRequired = isRequired,
                 min = requireNotNull(min),
                 max = requireNotNull(max),
-                placeHolder = placeHolder
+                placeHolder = placeHolder,
+                unit = unit
             )
             ApplicationItemKind.MULTIPLE_CHOICE -> MultipleChoiceApplicationItem(
                 id = id,

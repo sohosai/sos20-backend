@@ -11,5 +11,6 @@ data class NumberApplicationItem(
     override val isRequired: Boolean,
     val min: Int,
     val max: Int,
-    val placeHolder: String?
+    val placeHolder: String?,
+    val unit: String?
 ) : ApplicationItem
