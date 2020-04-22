@@ -11,7 +11,7 @@ data class ApplicationItemAnswerJson(
     val selectedOptionId: Int? = null,
     val selectedOptionIds: List<Int>? = null,
     val selectedOptionMap: Map<Int, Int>? = null,
-    val resourceIds: List<String>? = null
+    val fileIds: List<String>? = null
 ) {
     companion object {
         fun fromApplicationItemAnswer(answer: ApplicationItemAnswer): ApplicationItemAnswerJson {
@@ -44,7 +44,7 @@ data class ApplicationItemAnswerJson(
                 is ApplicationItemAnswerFile -> ApplicationItemAnswerJson(
                     kind = ApplicationItemKind.FILE,
                     itemId = answer.itemId,
-                    resourceIds = answer.resourceIds.map { it.toString() }
+                    fileIds = answer.fileIds.map { it.toString() }
                 )
                 else -> TODO("")
             }
@@ -74,7 +74,7 @@ data class ApplicationItemAnswerJson(
             )
             ApplicationItemKind.FILE -> ApplicationItemAnswerFile(
                 itemId = itemId,
-                resourceIds = requireNotNull(resourceIds).map { UUID.fromString(it) }
+                fileIds = requireNotNull(fileIds).map { UUID.fromString(it) }
             )
         }
     }

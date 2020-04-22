@@ -3,10 +3,13 @@ package com.sohosai.sos.infrastructure
 import com.sohosai.sos.database.JdbcApplicationRepository
 import com.sohosai.sos.database.JdbcProjectRepository
 import com.sohosai.sos.database.JdbcUserRepository
+import com.sohosai.sos.database.LocalFileRepository
 import com.sohosai.sos.domain.application.ApplicationRepository
+import com.sohosai.sos.domain.file.FileRepository
 import com.sohosai.sos.domain.project.ProjectRepository
 import com.sohosai.sos.domain.user.UserRepository
 import com.sohosai.sos.service.ApplicationService
+import com.sohosai.sos.service.FileService
 import com.sohosai.sos.service.ProjectService
 import com.sohosai.sos.service.UserService
 import com.zaxxer.hikari.HikariConfig
@@ -22,12 +25,14 @@ object KoinModules {
         single<UserService>()
         single<ProjectService>()
         single<ApplicationService>()
+        single<FileService>()
     }
 
     private fun repositories() = module {
         single<UserRepository> { JdbcUserRepository(get()) }
         single<ProjectRepository> { JdbcProjectRepository(get()) }
         single<ApplicationRepository> { JdbcApplicationRepository(get()) }
+        single<FileRepository> { LocalFileRepository() }
     }
 
     private fun database() = module {

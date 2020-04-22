@@ -1,6 +1,5 @@
 package com.sohosai.sos.interfaces.application
 
-import com.sohosai.sos.domain.application.Application
 import com.sohosai.sos.domain.application.answer.ProjectsApplicationAnswer
 import com.sohosai.sos.domain.application.json.ApplicationJson
 import com.sohosai.sos.interfaces.AuthContext
