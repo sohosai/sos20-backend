@@ -16,6 +16,7 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotliquery.Row
 import kotliquery.queryOf
@@ -58,6 +59,14 @@ private val LIST_APPLICATIONS_QUERY = """
 private val CREATE_APPLICATION_ANSWER_QUERY = """
     INSERT INTO application_answers(application_id, project_id, answers)
     VALUES (?, ?, CAST(? as jsonb))
+""".trimIndent()
+
+@Language("sql")
+private val LIST_ANSWERED_APPLICATIONS_BY_PROJECT_ID_QUERY = """
+    SELECT applications.*
+    FROM applications
+        LEFT JOIN application_answers answers on applications.id = answers.application_id AND project_id = ?
+    WHERE answers.application_id IS NOT NULL
 """.trimIndent()
 
 @Language("sql")
@@ -143,6 +152,20 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
                     CREATE_APPLICATION_ANSWER_QUERY,
                     applicationId, projectId, answersJson
                 )
+            )
+        }
+    }
+
+    override suspend fun listAnsweredApplicationByProjectId(
+        projectId: Int
+    ): List<Application> = withContext(Dispatchers.IO) {
+        sessionOf(dataSource).use { session ->
+            session.list(
+                queryOf(
+                    LIST_ANSWERED_APPLICATIONS_BY_PROJECT_ID_QUERY,
+                    projectId
+                ),
+                applicationExtractor
             )
         }
     }
