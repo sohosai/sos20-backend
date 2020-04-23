@@ -162,7 +162,7 @@ internal fun Routing.routes() {
                             bytes = it.streamProvider().readBytes()
                         )
                     }
-                call.respond(HttpStatusCode.Created, fileController.uploadFiles(files))
+                call.respond(HttpStatusCode.Created, fileController.uploadFiles(files, call.principal<AuthStatus>().asContext()))
             }
         }
         get("/") { call.respond(HttpStatusCode.OK) }

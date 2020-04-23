@@ -3,7 +3,6 @@ package com.sohosai.sos.service
 import com.sohosai.sos.domain.application.Application
 import com.sohosai.sos.domain.application.ApplicationRepository
 import com.sohosai.sos.domain.application.answer.ApplicationItemAnswer
-import com.sohosai.sos.domain.application.answer.ApplicationItemAnswerFile
 import com.sohosai.sos.domain.application.answer.ProjectsApplicationAnswer
 import com.sohosai.sos.domain.application.condition.ApplicationConditions
 import com.sohosai.sos.domain.application.item.ApplicationItem
@@ -11,8 +10,6 @@ import com.sohosai.sos.domain.project.ProjectRepository
 import com.sohosai.sos.domain.user.Role
 import com.sohosai.sos.domain.user.User
 import com.sohosai.sos.service.exception.NotEnoughPermissionException
-import java.io.File
-import java.nio.file.Files
 import java.time.LocalDate
 
 class ApplicationService(private val applicationRepository: ApplicationRepository, private val projectRepository: ProjectRepository) {

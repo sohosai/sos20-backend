@@ -6,7 +6,6 @@ import com.sohosai.sos.domain.application.condition.conditions.ApplicationCondit
 import com.sohosai.sos.domain.application.condition.conditions.ApplicationConditionAttributes
 import com.sohosai.sos.domain.application.condition.conditions.ApplicationConditionCategory
 import com.sohosai.sos.domain.application.item.ApplicationItemCondition
-import com.sohosai.sos.domain.application.item.ApplicationItemConditions
 import com.sohosai.sos.domain.project.ProjectAttribute
 import com.sohosai.sos.domain.project.ProjectCategory
 

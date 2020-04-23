@@ -1,9 +1,7 @@
 package com.sohosai.sos.domain.application.json
 
 import com.sohosai.sos.domain.application.Application
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
 import java.util.*
 
 private val dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE

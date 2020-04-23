@@ -1,22 +1,30 @@
 package com.sohosai.sos.domain.file
 
 import com.sohosai.sos.domain.KOIN
+import com.sohosai.sos.domain.user.User
 import java.util.*
 
 private val fileRepository by KOIN.inject<FileRepository>()
+private val fileInfoRepository by KOIN.inject<FileInfoRepository>()
 
 data class UploadedFile(
     val name: String,
     val bytes: ByteArray
 
 ) {
-    suspend fun store(): StoredFile {
+    suspend fun store(uploader: User): StoredFile {
         val id = UUID.randomUUID()
         val extension = name.split(".").let {
             if (it.size > 1) it.last()
             else ""
         }
 
+        fileInfoRepository.storeFileInfo(
+            fileId = id,
+            originalName = name,
+            extension = extension,
+            uploaderId = uploader.id
+        )
         fileRepository.storeFile(id, extension, bytes)
 
         return StoredFile(
