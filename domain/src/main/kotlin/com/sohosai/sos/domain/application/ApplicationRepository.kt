@@ -30,6 +30,11 @@ interface ApplicationRepository {
         answers: List<ApplicationItemAnswer>
     )
 
+    suspend fun findApplicationAnswerOfProject(
+        applicationId: Int,
+        projectId: Int
+    ): ProjectsApplicationAnswer?
+
     suspend fun listAnsweredApplicationByProjectId(
         projectId: Int
     ): List<Application>

@@ -10,6 +10,7 @@ import com.sohosai.sos.domain.project.ProjectRepository
 import com.sohosai.sos.domain.user.Role
 import com.sohosai.sos.domain.user.User
 import com.sohosai.sos.service.exception.NotEnoughPermissionException
+import java.lang.IllegalStateException
 import java.time.LocalDate
 
 class ApplicationService(private val applicationRepository: ApplicationRepository, private val projectRepository: ProjectRepository) {
@@ -66,6 +67,10 @@ class ApplicationService(private val applicationRepository: ApplicationRepositor
 
         val application = applicationRepository.findApplicationById(applicationId)
         requireNotNull(application) { "Application with id $applicationId is not found." }
+
+        applicationRepository.findApplicationAnswerOfProject(applicationId, projectId)?.let {
+            throw IllegalStateException("That project has already answered the application. project: $projectId application: $applicationId")
+        }
 
         // throw error when required item is not answered
         application.items.forEach { item ->
