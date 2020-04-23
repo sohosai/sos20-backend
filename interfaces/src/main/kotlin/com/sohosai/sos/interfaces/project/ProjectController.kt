@@ -48,6 +48,15 @@ class ProjectController(private val projectService: ProjectService) {
         return ProjectMembersOutput.fromProjectMembers(members)
     }
 
+    suspend fun getAnsweredApplications(rawProjectId: String, context: AuthContext): List<ApplicationJson> {
+        val applications = projectService.getAnsweredApplications(
+            projectId = rawProjectId.toInt(),
+            caller = context.toUser()
+        )
+
+        return applications.map { ApplicationJson.fromApplication(it) }
+    }
+
     suspend fun getNotAnsweredApplications(rawProjectId: String, context: AuthContext): List<ApplicationJson> {
         val applications = projectService.getNotAnsweredApplications(
             projectId = rawProjectId.toInt(),

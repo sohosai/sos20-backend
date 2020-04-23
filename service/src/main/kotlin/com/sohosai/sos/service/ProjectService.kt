@@ -83,6 +83,15 @@ class ProjectService(
         )
     }
 
+    suspend fun getAnsweredApplications(projectId: Int, caller: User): List<Application> {
+        val project = projectRepository.findById(projectId) ?: throw IllegalArgumentException("Project not found. projectId: $projectId")
+        if (!project.canAccessBy(caller)) {
+            throw IllegalArgumentException("Project not found. projectId: $projectId")
+        }
+
+        return applicationRepository.listAnsweredApplicationByProjectId(projectId)
+    }
+
     suspend fun getNotAnsweredApplications(projectId: Int, caller: User): List<Application> {
         val project = projectRepository.findById(projectId) ?: throw IllegalArgumentException("Project not found. projectId: $projectId")
         if (!project.canAccessBy(caller)) {
