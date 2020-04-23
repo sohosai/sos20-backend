@@ -1,13 +1,19 @@
 package com.sohosai.sos.infrastructure
 
+import com.sohosai.sos.domain.file.UploadedFile
 import com.sohosai.sos.interfaces.application.ApplicationController
+import com.sohosai.sos.interfaces.file.FileController
 import com.sohosai.sos.interfaces.project.ProjectController
 import com.sohosai.sos.interfaces.user.UserController
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.auth.principal
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.PartData
+import io.ktor.http.content.readAllParts
+import io.ktor.http.content.streamProvider
 import io.ktor.request.receive
+import io.ktor.request.receiveMultipart
 import io.ktor.request.receiveText
 import io.ktor.response.respond
 import io.ktor.routing.Routing
@@ -21,6 +27,7 @@ internal fun Routing.routes() {
     val userController = UserController(get())
     val projectController = ProjectController(get())
     val applicationController = ApplicationController(get())
+    val fileController = FileController(get())
     authenticate {
         route("/users") {
             get {
@@ -71,7 +78,7 @@ internal fun Routing.routes() {
                 ))
             }
         }
-        route ("/projects") {
+        route("/projects") {
             get {
                 call.respond(projectController.listProjects(
                     context = call.principal<AuthStatus>().asContext()
@@ -112,7 +119,7 @@ internal fun Routing.routes() {
                 }
             }
         }
-        route ("/applications") {
+        route("/applications") {
             get {
                 call.respond(applicationController.listApplications(
                     context = call.principal<AuthStatus>().asContext()
@@ -143,6 +150,19 @@ internal fun Routing.routes() {
                         context = call.principal<AuthStatus>().asContext()
                     ))
                 }
+            }
+        }
+        route("/files") {
+            post("/") {
+                val files = call.receiveMultipart().readAllParts()
+                    .filterIsInstance<PartData.FileItem>()
+                    .map {
+                        UploadedFile(
+                            name = it.name ?: "",
+                            bytes = it.streamProvider().readBytes()
+                        )
+                    }
+                call.respond(HttpStatusCode.Created, fileController.uploadFiles(files, call.principal<AuthStatus>().asContext()))
             }
         }
         get("/") { call.respond(HttpStatusCode.OK) }

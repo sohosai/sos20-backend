@@ -9,3 +9,4 @@ build/
 
 # Temp
 docker-compose-prod.yml
+/uploaded

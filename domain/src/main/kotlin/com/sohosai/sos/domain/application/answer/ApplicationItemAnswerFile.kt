@@ -4,5 +4,5 @@ import java.util.*
 
 data class ApplicationItemAnswerFile(
     override val itemId: Int,
-    val resourceIds: List<UUID>
+    val fileIds: List<UUID>
 ) : ApplicationItemAnswer

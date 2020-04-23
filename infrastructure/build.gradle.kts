@@ -18,8 +18,6 @@ dependencies {
     implementation("io.ktor:ktor-auth-jwt:$ktorVersion")
     implementation("io.ktor:ktor-gson:$ktorVersion")
 
-    implementation("org.koin:koin-core:$koinVersion")
-    implementation("org.koin:koin-core-ext:$koinVersion")
     implementation("org.koin:koin-ktor:$koinVersion")
 
     implementation("com.zaxxer:HikariCP:3.4.1")
