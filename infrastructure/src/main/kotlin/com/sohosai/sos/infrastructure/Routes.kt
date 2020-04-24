@@ -5,6 +5,7 @@ import com.sohosai.sos.interfaces.application.ApplicationController
 import com.sohosai.sos.interfaces.file.FileController
 import com.sohosai.sos.interfaces.project.ProjectController
 import com.sohosai.sos.interfaces.user.UserController
+import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.auth.principal
@@ -162,18 +163,30 @@ internal fun Routing.routes() {
         }
         route("/files") {
             post("/") {
-                val files = call.receiveMultipart().readAllParts()
-                    .filterIsInstance<PartData.FileItem>()
-                    .map {
-                        UploadedFile(
-                            name = it.name ?: "",
-                            bytes = it.streamProvider().readBytes()
-                        )
-                    }
-                call.respond(HttpStatusCode.Created, fileController.uploadFiles(files, call.principal<AuthStatus>().asContext()))
+                call.respond(HttpStatusCode.Created, fileController.uploadFiles(
+                    files = call.receiveUploadedFiles(),
+                    context = call.principal<AuthStatus>().asContext()
+                ))
             }
+        }
+        post("/distributions") {
+            call.respond(HttpStatusCode.Created, fileController.distributeFiles(
+                files = call.receiveUploadedFiles(),
+                context = call.principal<AuthStatus>().asContext()
+            ))
         }
         get("/") { call.respond(HttpStatusCode.OK) }
         get("/health-check") { call.respond(HttpStatusCode.OK) }
     }
+}
+
+suspend fun ApplicationCall.receiveUploadedFiles(): List<UploadedFile> {
+    return this.receiveMultipart().readAllParts()
+        .filterIsInstance<PartData.FileItem>()
+        .map {
+            UploadedFile(
+                name = it.name ?: "",
+                bytes = it.streamProvider().readBytes()
+            )
+        }
 }

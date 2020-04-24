@@ -1,4 +1,4 @@
-CREATE TABLE file_infos (
+CREATE TABLE files (
     id UUID PRIMARY KEY,
     original_name VARCHAR(256) NOT NULL,
     ext VARCHAR(64),
