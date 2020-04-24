@@ -1,8 +1,10 @@
 package com.sohosai.sos.interfaces.project
 
 import com.sohosai.sos.domain.application.json.ApplicationJson
+import com.sohosai.sos.domain.file.Distribution
 import com.sohosai.sos.interfaces.AuthContext
 import com.sohosai.sos.interfaces.HttpStatusCodeException
+import com.sohosai.sos.interfaces.file.DistributionOutput
 import com.sohosai.sos.interfaces.toUser
 import com.sohosai.sos.service.ProjectService
 
@@ -64,5 +66,14 @@ class ProjectController(private val projectService: ProjectService) {
         )
 
         return applications.map { ApplicationJson.fromApplication(it) }
+    }
+
+    suspend fun getDistributionsForProject(rawProjectId: String, context: AuthContext): List<DistributionOutput> {
+        return projectService.getDistributionsForProject(
+            projectId = rawProjectId.toInt(),
+            caller = context.toUser()
+        ).map {
+            DistributionOutput.fromDistribution(it)
+        }
     }
 }
