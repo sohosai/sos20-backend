@@ -16,6 +16,13 @@ private val CREATE_DISTRIBUTION_QUERY = """
     VALUES (?, ?, ?)
 """.trimIndent()
 
+@Language("sql")
+private val FIND_DISTRIBUTION_QUERY = """
+    SELECT id, file_id, project_id
+    FROM distributions
+    WHERE id = ?
+""".trimIndent()
+
 class JdbcDistributionRepository(private val dataSource: DataSource) : DistributionRepository {
 
     override suspend fun createDistribution(fileId: UUID, projectId: Int): Distribution = withContext(Dispatchers.IO) {
@@ -30,5 +37,19 @@ class JdbcDistributionRepository(private val dataSource: DataSource) : Distribut
             fileId = fileId,
             projectId = projectId
         )
+    }
+
+    override suspend fun findDistributionById(id: UUID): Distribution? = withContext(Dispatchers.IO) {
+        sessionOf(dataSource).use { session ->
+            session.single(
+                queryOf(FIND_DISTRIBUTION_QUERY, id)
+            ) {row ->
+                Distribution(
+                    id = row.uuid("id"),
+                    fileId = row.uuid("file_id"),
+                    projectId = row.int("project_id")
+                )
+            }
+        }
     }
 }

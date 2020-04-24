@@ -17,6 +17,7 @@ import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
 import io.ktor.request.receiveText
 import io.ktor.response.respond
+import io.ktor.response.respondFile
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.post
@@ -169,11 +170,19 @@ internal fun Routing.routes() {
                 ))
             }
         }
-        post("/distributions") {
-            call.respond(HttpStatusCode.Created, fileController.distributeFiles(
-                files = call.receiveUploadedFiles(),
-                context = call.principal<AuthStatus>().asContext()
-            ))
+        route("distributions") {
+            post("/") {
+                call.respond(HttpStatusCode.Created, fileController.distributeFiles(
+                    files = call.receiveUploadedFiles(),
+                    context = call.principal<AuthStatus>().asContext()
+                ))
+            }
+            get("/{id}") {
+                call.respondFile(fileController.fetchDistribution(
+                    rawDistributionId = call.parameters.getOrFail("id"),
+                    context = call.principal<AuthStatus>().asContext()
+                ))
+            }
         }
         get("/") { call.respond(HttpStatusCode.OK) }
         get("/health-check") { call.respond(HttpStatusCode.OK) }

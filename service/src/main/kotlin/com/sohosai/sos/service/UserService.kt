@@ -52,11 +52,11 @@ class UserService(private val userRepository: UserRepository, private val projec
     }
 
     suspend fun findOwningProject(caller: User): Project? {
-        return projectRepository.findProjectByOwner(caller.id)
+        return caller.owningProject()
     }
 
     suspend fun findSubOwningProject(caller: User): Project? {
-        return projectRepository.findProjectBySubOwner(caller.id)
+        return caller.subOwningProject()
     }
 
     suspend fun updateUserRole(caller: User, userId: UUID, role: Role) {

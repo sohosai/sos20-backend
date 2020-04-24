@@ -4,4 +4,5 @@ import java.util.*
 
 interface DistributionRepository {
     suspend fun createDistribution(fileId: UUID, projectId: Int): Distribution
+    suspend fun findDistributionById(id: UUID): Distribution?
 }

@@ -25,7 +25,7 @@ data class UploadedFile(
             extension = extension,
             uploaderId = uploader.id
         )
-        fileRepository.storeFile(id, extension, bytes)
+        fileRepository.storeFile(id, bytes)
 
         return StoredFile(
             id = id,
