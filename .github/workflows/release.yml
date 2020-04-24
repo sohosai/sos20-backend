@@ -85,3 +85,4 @@ jobs:
       TF_VAR_PUBLIC_KEY: ${{ secrets.SERVER_PUBLIC_KEY }}
       TF_VAR_PRIVATE_KEY: ${{ secrets.SERVER_PRIVATE_KEY }}
       TF_VAR_GIT_HASH: ${{ github.sha }}
+      TF_VAR_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
