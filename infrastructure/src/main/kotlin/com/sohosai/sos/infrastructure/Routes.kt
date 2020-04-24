@@ -1,6 +1,7 @@
 package com.sohosai.sos.infrastructure
 
 import com.sohosai.sos.domain.file.UploadedFile
+import com.sohosai.sos.interfaces.HttpStatusCodeException
 import com.sohosai.sos.interfaces.application.ApplicationController
 import com.sohosai.sos.interfaces.file.FileController
 import com.sohosai.sos.interfaces.project.ProjectController
@@ -127,6 +128,14 @@ internal fun Routing.routes() {
                         )
                     }
                 }
+                get("/distributions") {
+                    call.respond(
+                        projectController.getDistributionsForProject(
+                            rawProjectId = call.parameters.getOrFail("id"),
+                            context = call.principal<AuthStatus>().asContext()
+                        )
+                    )
+                }
             }
         }
         route("/applications") {
@@ -177,11 +186,21 @@ internal fun Routing.routes() {
                     context = call.principal<AuthStatus>().asContext()
                 ))
             }
-            get("/{id}") {
-                call.respondFile(fileController.fetchDistribution(
-                    rawDistributionId = call.parameters.getOrFail("id"),
-                    context = call.principal<AuthStatus>().asContext()
-                ))
+            route("/{id}") {
+                get("/") {
+                    fileController.getDistribution(
+                        rawDistributionId = call.parameters.getOrFail("id"),
+                        context = call.principal<AuthStatus>().asContext()
+                    )?.let {
+                        call.respond(it)
+                    } ?: call.respond(HttpStatusCode.NotFound)
+                }
+                get("/file") {
+                    call.respondFile(fileController.fetchDistributionFile(
+                        rawDistributionId = call.parameters.getOrFail("id"),
+                        context = call.principal<AuthStatus>().asContext()
+                    ))
+                }
             }
         }
         get("/") { call.respond(HttpStatusCode.OK) }

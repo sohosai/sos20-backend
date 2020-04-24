@@ -2,6 +2,8 @@ package com.sohosai.sos.service
 
 import com.sohosai.sos.domain.application.Application
 import com.sohosai.sos.domain.application.ApplicationRepository
+import com.sohosai.sos.domain.file.Distribution
+import com.sohosai.sos.domain.file.DistributionRepository
 import com.sohosai.sos.domain.project.*
 import com.sohosai.sos.domain.user.Role
 import com.sohosai.sos.domain.user.User
@@ -12,7 +14,8 @@ import java.util.*
 class ProjectService(
     private val projectRepository: ProjectRepository,
     private val userRepository: UserRepository,
-    private val applicationRepository: ApplicationRepository
+    private val applicationRepository: ApplicationRepository,
+    private val distributionRepository: DistributionRepository
 ) {
     suspend fun createProject(
         ownerId: UUID,
@@ -99,5 +102,14 @@ class ProjectService(
         }
 
         return applicationRepository.listNotAnsweredApplicationByProjectId(projectId)
+    }
+
+    suspend fun getDistributionsForProject(projectId: Int, caller: User): List<Distribution> {
+        val project = projectRepository.findById(projectId) ?: throw IllegalArgumentException("Project not found. projectId: $projectId")
+        if (!project.canAccessBy(caller)) {
+            throw IllegalArgumentException("Project not found. projectId: $projectId")
+        }
+
+        return distributionRepository.findDistributionsForProject(projectId)
     }
 }
