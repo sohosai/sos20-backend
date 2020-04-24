@@ -2,6 +2,7 @@ package com.sohosai.sos.infrastructure
 
 import com.sohosai.sos.database.*
 import com.sohosai.sos.domain.application.ApplicationRepository
+import com.sohosai.sos.domain.file.DistributionRepository
 import com.sohosai.sos.domain.file.FileInfoRepository
 import com.sohosai.sos.domain.file.FileRepository
 import com.sohosai.sos.domain.project.ProjectRepository
@@ -32,6 +33,7 @@ object KoinModules {
         single<ApplicationRepository> { JdbcApplicationRepository(get()) }
         single<FileRepository> { LocalFileRepository() }
         single<FileInfoRepository> { JdbcFileInfoRepository(get()) }
+        single<DistributionRepository> { JdbcDistributionRepository(get()) }
     }
 
     private fun database() = module {

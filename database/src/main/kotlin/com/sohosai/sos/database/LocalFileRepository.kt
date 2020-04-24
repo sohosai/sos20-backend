@@ -7,14 +7,18 @@ import java.io.File
 import java.util.*
 
 class LocalFileRepository : FileRepository {
-    override suspend fun storeFile(id: UUID, extension: String?, bytes: ByteArray): Unit = withContext<Unit>(Dispatchers.IO) {
+    override suspend fun storeFile(id: UUID, bytes: ByteArray): Unit = withContext<Unit>(Dispatchers.IO) {
         initDir()
 
-        val extensionWithDot = extension?.let { ".${extension}" } ?: ""
-        File("./uploaded/${id}${extensionWithDot}").apply {
+        File("./uploaded/${id}").apply {
             createNewFile()
             writeBytes(bytes)
         }
+    }
+
+    override suspend fun findFile(id: UUID): File? = withContext(Dispatchers.IO) {
+        val file = File("./uploaded/${id}")
+        if (file.exists()) file else null
     }
 
     private fun initDir() {

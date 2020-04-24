@@ -5,6 +5,7 @@ import com.sohosai.sos.interfaces.application.ApplicationController
 import com.sohosai.sos.interfaces.file.FileController
 import com.sohosai.sos.interfaces.project.ProjectController
 import com.sohosai.sos.interfaces.user.UserController
+import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.auth.principal
@@ -16,6 +17,7 @@ import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
 import io.ktor.request.receiveText
 import io.ktor.response.respond
+import io.ktor.response.respondFile
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.post
@@ -162,18 +164,38 @@ internal fun Routing.routes() {
         }
         route("/files") {
             post("/") {
-                val files = call.receiveMultipart().readAllParts()
-                    .filterIsInstance<PartData.FileItem>()
-                    .map {
-                        UploadedFile(
-                            name = it.name ?: "",
-                            bytes = it.streamProvider().readBytes()
-                        )
-                    }
-                call.respond(HttpStatusCode.Created, fileController.uploadFiles(files, call.principal<AuthStatus>().asContext()))
+                call.respond(HttpStatusCode.Created, fileController.uploadFiles(
+                    files = call.receiveUploadedFiles(),
+                    context = call.principal<AuthStatus>().asContext()
+                ))
+            }
+        }
+        route("distributions") {
+            post("/") {
+                call.respond(HttpStatusCode.Created, fileController.distributeFiles(
+                    files = call.receiveUploadedFiles(),
+                    context = call.principal<AuthStatus>().asContext()
+                ))
+            }
+            get("/{id}") {
+                call.respondFile(fileController.fetchDistribution(
+                    rawDistributionId = call.parameters.getOrFail("id"),
+                    context = call.principal<AuthStatus>().asContext()
+                ))
             }
         }
         get("/") { call.respond(HttpStatusCode.OK) }
         get("/health-check") { call.respond(HttpStatusCode.OK) }
     }
+}
+
+suspend fun ApplicationCall.receiveUploadedFiles(): List<UploadedFile> {
+    return this.receiveMultipart().readAllParts()
+        .filterIsInstance<PartData.FileItem>()
+        .map {
+            UploadedFile(
+                name = it.name ?: "",
+                bytes = it.streamProvider().readBytes()
+            )
+        }
 }

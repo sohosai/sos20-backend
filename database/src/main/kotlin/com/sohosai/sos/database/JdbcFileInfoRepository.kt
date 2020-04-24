@@ -11,7 +11,7 @@ import javax.sql.DataSource
 
 @Language("sql")
 private val STORE_FILE_INFO_QUERY = """
-    INSERT INTO file_infos(id, original_name, ext, uploader_id)
+    INSERT INTO files(id, original_name, ext, uploader_id)
     VALUES (?, ?, ?, ?)
 """.trimIndent()
 

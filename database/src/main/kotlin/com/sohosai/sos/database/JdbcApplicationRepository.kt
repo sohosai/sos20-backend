@@ -62,6 +62,14 @@ private val CREATE_APPLICATION_ANSWER_QUERY = """
 """.trimIndent()
 
 @Language("sql")
+private val FIND_ANSWER_BY_PROJECT = """
+    SELECT application_answers.*, p.*
+    FROM application_answers
+        LEFT JOIN projects AS p on application_answers.project_id = p.id
+    WHERE application_id = ? AND project_id = ?
+""".trimIndent()
+
+@Language("sql")
 private val LIST_ANSWERED_APPLICATIONS_BY_PROJECT_ID_QUERY = """
     SELECT applications.*
     FROM applications
@@ -156,6 +164,21 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
         }
     }
 
+    override suspend fun findApplicationAnswerOfProject(
+        applicationId: Int,
+        projectId: Int
+    ): ProjectsApplicationAnswer? = withContext(Dispatchers.IO) {
+        sessionOf(dataSource).use { session ->
+            session.single(
+                queryOf(
+                    FIND_ANSWER_BY_PROJECT,
+                    applicationId, projectId
+                ),
+                projectAnswersExtractor
+            )
+        }
+    }
+
     override suspend fun listAnsweredApplicationByProjectId(
         projectId: Int
     ): List<Application> = withContext(Dispatchers.IO) {
@@ -188,23 +211,7 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
         applicationId: Int
     ): List<ProjectsApplicationAnswer> = withContext(coroutineContext) {
         sessionOf(dataSource).use { session ->
-            session.list(queryOf(LIST_ANSWERS_QUERY, applicationId)) { row ->
-                ProjectsApplicationAnswer(
-                    project = Project(
-                        id = row.int("id"),
-                        ownerId = row.uuid("owner_id"),
-                        subOwnerId = row.uuidOrNull("sub_owner_id"),
-                        name = row.string("name"),
-                        kanaName = row.string("kana_name"),
-                        groupName = row.string("group_name"),
-                        kanaGroupName = row.string("kana_group_name"),
-                        description = row.string("description"),
-                        category = ProjectCategory.valueOf(row.string("category")),
-                        attributes = row.array<String>("attributes").map { ProjectAttribute.valueOf(it) }
-                    ),
-                    answers = answersAdapter.fromJson(row.string("answers"))!!
-                )
-            }
+            session.list(queryOf(LIST_ANSWERS_QUERY, applicationId), projectAnswersExtractor)
         }
     }
 
@@ -220,6 +227,24 @@ class JdbcApplicationRepository(private val dataSource: DataSource) : Applicatio
             },
             startDate = row.localDate("start_date"),
             endDate = row.localDate("end_date")
+        )
+    }
+
+    private val projectAnswersExtractor = { row: Row ->
+        ProjectsApplicationAnswer(
+            project = Project(
+                id = row.int("id"),
+                ownerId = row.uuid("owner_id"),
+                subOwnerId = row.uuidOrNull("sub_owner_id"),
+                name = row.string("name"),
+                kanaName = row.string("kana_name"),
+                groupName = row.string("group_name"),
+                kanaGroupName = row.string("kana_group_name"),
+                description = row.string("description"),
+                category = ProjectCategory.valueOf(row.string("category")),
+                attributes = row.array<String>("attributes").map { ProjectAttribute.valueOf(it) }
+            ),
+            answers = answersAdapter.fromJson(row.string("answers"))!!
         )
     }
 }
