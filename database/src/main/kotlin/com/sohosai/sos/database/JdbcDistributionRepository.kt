@@ -59,10 +59,10 @@ class JdbcDistributionRepository(private val dataSource: DataSource) : Distribut
         }
     }
 
-    override suspend fun findDistributionsForProject(projectId: Int): List<Distribution> = withContext(Dispatchers.IO) {
+    override suspend fun findDistributionsForProject(projectName: Int): List<Distribution> = withContext(Dispatchers.IO) {
         sessionOf(dataSource).use { session ->
             session.list(
-                queryOf(FIND_DISTRIBUTIONS_FOR_PROJECT_QUERY, projectId),
+                queryOf(FIND_DISTRIBUTIONS_FOR_PROJECT_QUERY, projectName),
                 distributionExtractor
             )
         }
