@@ -20,6 +20,7 @@ subprojects {
         implementation("org.koin:koin-core:$koinVersion")
         implementation("org.koin:koin-core-ext:$koinVersion")
         implementation("ch.qos.logback:logback-classic:1.2.3")
+        implementation("io.sentry:sentry-logback:1.7.30")
     }
 
     group = "com.sohosai"

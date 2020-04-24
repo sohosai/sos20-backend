@@ -24,6 +24,7 @@ import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
 import io.ktor.util.getOrFail
+import io.sentry.Sentry
 import org.koin.ktor.ext.get
 
 internal fun Routing.routes() {
@@ -203,8 +204,10 @@ internal fun Routing.routes() {
                 }
             }
         }
-        get("/") { call.respond(HttpStatusCode.OK) }
-        get("/health-check") { call.respond(HttpStatusCode.OK) }
+    }
+    get("/") {
+        Sentry.capture("Health check")
+        call.respond(HttpStatusCode.OK)
     }
 }
 

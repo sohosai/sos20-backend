@@ -1,6 +1,5 @@
 package com.sohosai.sos.interfaces.file
 
-import com.sohosai.sos.domain.file.Distribution
 import com.sohosai.sos.domain.file.StoredFile
 import com.sohosai.sos.domain.file.UploadedFile
 import com.sohosai.sos.interfaces.AuthContext
