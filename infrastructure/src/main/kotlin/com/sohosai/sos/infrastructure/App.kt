@@ -21,6 +21,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.routing.routing
 import io.ktor.server.netty.EngineMain
+import io.sentry.Sentry
 import org.flywaydb.core.Flyway
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
@@ -41,6 +42,13 @@ fun main(args: Array<String>) {
 fun Application.configure() {
     application = this
     env = this.environment
+
+    env.config.propertyOrNull("sentry.dsn")?.getString()?.let { dsn ->
+        val options = env.config.property("sentry.options").getList().joinToString("&")
+        println("$dsn?$options")
+        Sentry.init("$dsn?$options")
+        application.log.info("Sentry configured.")
+    }
 
     install(Koin) {
         modules(KoinModules.dev())
